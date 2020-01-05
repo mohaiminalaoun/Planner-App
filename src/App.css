@@ -1,38 +1,71 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.my-facebook-button-class {
+  position: absolute;
+  position: absolute;
+  margin-top: 40vh;
+  background: #3b5998;
   color: white;
+  font-weight: 600;
+  width: 200px;
+  margin-left: calc(50vw - 100px);
 }
 
-.App-link {
-  color: #61dafb;
+.checklist-container {
+  width: 400px;
+  margin-left: calc(50vw - 200px);
+  margin-top: 20vh;
+  min-width: 300px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.menuItembutton {
+  margin-top: 0.5vh;
+  background-color: indianred;
+  float: right;
+  height: 15px;
+  border-radius: 15px;
+}
+.menuLinkbutton {
+  margin-top: 0.5vh;
+  background-color: green;
+  float: right;
+  height: 15px;
+  border-radius: 15px;
+}
+.nameHeader {
+  padding-bottom: 2vh;
+}
+.userName {
+  color: #3b5998;
+  font-weight: 600;
+}
+
+.smallMenuButton {
+  margin-top: 0.5vh;
+  background-color: lightgrey;
+  float: right;
+  height: 15px;
+  border-radius: 15px;
+  opacity: 0.3;
+}
+.smallMenuButton:hover {
+  opacity: 0.9;
+}
+
+.bootstrap-select {
+  align-self: flex-end;
+  height: 20px;
+  width: 20px;
+  margin: 3px;
+}
+
+.optionContainer {
+  display: inline-flex;
+}
+
+.endTime {
+  margin-left: 10px;
+  display: inline-flex;
+  height: 10px;
+  font-size: 9px;
+  font-weight: lighter;
+  margin-top: -4px;
 }
