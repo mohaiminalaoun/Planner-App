@@ -1,0 +1,11 @@
+.taskContextMenu {
+  position: absolute;
+  z-index: 2;
+}
+
+.deadline-close-btn {
+  position: absolute !important;
+  display: inline-block;
+  top: 0px;
+  left: 190px;
+}

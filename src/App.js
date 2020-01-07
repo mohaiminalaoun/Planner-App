@@ -4,6 +4,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import FacebookLogin from "react-facebook-login";
 import "bootstrap/dist/css/bootstrap.min.css";
+import TaskContextMenu from "./TaskContextMenu";
 import {
   Button,
   ListGroup,
@@ -25,8 +26,12 @@ class App extends React.Component {
 
     this.state = {
       loggedin: false,
+      displayTaskCtxMenu: false,
+      curDeadline: "",
       tasks: [],
+      tempPosition: [],
       curTask: "",
+      tempTask: "",
       userName: ""
     };
   }
@@ -92,40 +97,64 @@ class App extends React.Component {
       .delete();
   };
 
-  // TODO: add stylish prompt for user
-  getLinkInfo = ev => {
-    let end = parseInt(window.prompt("Add a number")),
-      curTask = ev.currentTarget.value,
-      tasks = this.state.tasks.concat(),
-      idx = 0;
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].task === curTask) {
-        idx = i;
-        tasks[i].end = Moment(new Date()).add(end, "hour")._d;
-        break;
+  // Function to show the context menu
+  showDeadlineContextMenu = ev => {
+    this.setState({
+      displayTaskCtxMenu: true,
+      tempTask: ev.currentTarget.value,
+      tempPosition: [ev.clientX, ev.clientY]
+    });
+  };
+
+  closeFn = () => {
+    let tasks = this.state.tasks.concat();
+    let curTask = this.state.tempTask;
+    let idx = 0;
+    this.setState({
+      displayTaskCtxMenu: false
+    });
+    let end = parseInt(this.state.curDeadline);
+    if (Number.isInteger(end)) {
+      for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].task === curTask) {
+          idx = i;
+          tasks[i].end = Moment(new Date()).add(end, "hour")._d;
+          break;
+        }
       }
+      this.setState({
+        tasks: tasks
+      });
+
+      let firstMatch;
+      db.tasks
+        .where("task")
+        .equalsIgnoreCase(curTask)
+        .first(item => {
+          if (Number.isInteger(end)) {
+            let date = new Date(),
+              curTime = date.getTime();
+            firstMatch = item;
+            let endTime = Moment().add(end, "hour");
+            db.tasks.put({
+              userName: this.state.userName,
+              task: curTask,
+              endTime: endTime._d,
+              id: firstMatch.id
+            });
+          }
+        });
     }
     this.setState({
-      tasks: tasks
+      tempTask: "",
+      curDeadline: ""
     });
-    let firstMatch;
-    db.tasks
-      .where("task")
-      .equalsIgnoreCase(curTask)
-      .first(item => {
-        if (Number.isInteger(end)) {
-          let date = new Date(),
-            curTime = date.getTime();
-          firstMatch = item;
-          let endTime = Moment().add(end, "hour");
-          db.tasks.put({
-            userName: this.state.userName,
-            task: curTask,
-            endTime: endTime._d,
-            id: firstMatch.id
-          });
-        }
-      });
+  };
+
+  deadlineChangeFn = ev => {
+    this.setState({
+      curDeadline: ev.target.value
+    });
   };
 
   render = () => {
@@ -159,6 +188,14 @@ class App extends React.Component {
               </InputGroup.Append>
             </InputGroup>
             <ListGroup>
+              {this.state.displayTaskCtxMenu ? (
+                <TaskContextMenu
+                  closeFn={this.closeFn}
+                  changeFn={this.deadlineChangeFn}
+                  curDeadline={this.state.curDeadline}
+                  tempPosition={this.state.tempPosition}
+                ></TaskContextMenu>
+              ) : null}
               {this.state &&
                 this.state.tasks.map(task => {
                   return (
@@ -173,7 +210,7 @@ class App extends React.Component {
                         className="menuItembutton"
                       />
                       <button
-                        onClick={this.getLinkInfo}
+                        onClick={this.showDeadlineContextMenu}
                         value={task.task}
                         className="menuLinkbutton"
                       />
