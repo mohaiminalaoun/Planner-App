@@ -1,0 +1,10 @@
+.menuItems {
+  position: absolute;
+  z-index: 2;
+}
+.menuOption {
+  cursor: pointer;
+}
+.menuOption:hover {
+  background-color: lightgrey;
+}

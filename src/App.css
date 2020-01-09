@@ -69,3 +69,7 @@
   font-weight: lighter;
   margin-top: -4px;
 }
+
+.list-link {
+  overflow: hidden;
+}

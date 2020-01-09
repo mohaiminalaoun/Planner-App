@@ -1,22 +1,12 @@
 import React from "react";
 import Moment from "moment";
-import logo from "./logo.svg";
 import "./App.css";
 import FacebookLogin from "react-facebook-login";
 import "bootstrap/dist/css/bootstrap.min.css";
 import TaskContextMenu from "./TaskContextMenu";
-import {
-  Button,
-  ListGroup,
-  InputGroup,
-  FormControl,
-  OverlayTrigger,
-  Popover,
-  ButtonGroup,
-  ToggleButton,
-  DropdownButton,
-  Dropdown
-} from "react-bootstrap";
+import MenuItems from "./MenuItems";
+import LinkContextMenu from "./LinkContextMenu";
+import { Button, ListGroup, InputGroup, FormControl } from "react-bootstrap";
 import db from "./db";
 
 class App extends React.Component {
@@ -26,13 +16,37 @@ class App extends React.Component {
 
     this.state = {
       loggedin: false,
-      displayTaskCtxMenu: false,
       curDeadline: "",
       tasks: [],
       tempPosition: [],
       curTask: "",
       tempTask: "",
-      userName: ""
+      userName: "",
+      displayAllContextMenus: false,
+      displayTaskCtxMenu: false,
+      displayLinkCtxMenu: false,
+      currentURL: "",
+      currentURLText: "",
+      menuOptionsList: [
+        {
+          text: "Add deadline",
+          onClick: () => {
+            this.setState({
+              displayAllContextMenus: false,
+              displayTaskCtxMenu: true
+            });
+          }
+        },
+        {
+          text: "Add link",
+          onClick: () => {
+            this.setState({
+              displayAllContextMenus: false,
+              displayLinkCtxMenu: true
+            });
+          }
+        }
+      ]
     };
   }
   responseFacebook = res => {
@@ -40,10 +54,12 @@ class App extends React.Component {
     db.tasks
       .where("userName")
       .equalsIgnoreCase(res.name)
-      .each(function(rec) {
+      .each(rec => {
         tasks.push({
           task: rec.task,
-          end: rec.endTime
+          end: rec.endTime,
+          url: rec.url,
+          urlText: rec.urlText
         });
       })
       .then(() => {
@@ -67,6 +83,12 @@ class App extends React.Component {
       });
       db.tasks.put({ userName: this.state.userName, task: curTask });
     }
+  };
+
+  closeAllCtxMenus = () => {
+    this.setState({
+      displayAllContextMenus: false
+    });
   };
 
   handleInputChange = ev => {
@@ -100,7 +122,8 @@ class App extends React.Component {
   // Function to show the context menu
   showDeadlineContextMenu = ev => {
     this.setState({
-      displayTaskCtxMenu: true,
+      //displayTaskCtxMenu: true,
+      displayAllContextMenus: true,
       tempTask: ev.currentTarget.value,
       tempPosition: [ev.clientX, ev.clientY]
     });
@@ -109,7 +132,6 @@ class App extends React.Component {
   closeFn = () => {
     let tasks = this.state.tasks.concat();
     let curTask = this.state.tempTask;
-    let idx = 0;
     this.setState({
       displayTaskCtxMenu: false
     });
@@ -117,7 +139,6 @@ class App extends React.Component {
     if (Number.isInteger(end)) {
       for (let i = 0; i < tasks.length; i++) {
         if (tasks[i].task === curTask) {
-          idx = i;
           tasks[i].end = Moment(new Date()).add(end, "hour")._d;
           break;
         }
@@ -132,8 +153,7 @@ class App extends React.Component {
         .equalsIgnoreCase(curTask)
         .first(item => {
           if (Number.isInteger(end)) {
-            let date = new Date(),
-              curTime = date.getTime();
+            let date = new Date();
             firstMatch = item;
             let endTime = Moment().add(end, "hour");
             db.tasks.put({
@@ -151,9 +171,64 @@ class App extends React.Component {
     });
   };
 
+  // Functions for the link
+  linkCloseFn = () => {
+    this.setState({
+      displayLinkCtxMenu: false,
+      currentURL: "",
+      currentURLText: ""
+    });
+  };
+
+  saveLinkFn = () => {
+    let curURL = this.state.currentURL,
+      curURLText = this.state.currentURLText;
+    let tasks = this.state.tasks.concat();
+    let curTask = this.state.tempTask;
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].task === curTask) {
+        tasks[i].url = curURL;
+        tasks[i].urlText = curURLText;
+        break;
+      }
+    }
+    db.tasks
+      .where("task")
+      .equalsIgnoreCase(curTask)
+      .first(item => {
+        let firstMatch = item;
+        db.tasks.put({
+          userName: this.state.userName,
+          task: curTask,
+          endTime: firstMatch.endTime,
+          url: curURL,
+          urlText: curURLText,
+          id: firstMatch.id
+        });
+      });
+    this.setState({
+      displayLinkCtxMenu: false,
+      tasks: tasks,
+      currentURL: "",
+      currentURLText: ""
+    });
+  };
+
   deadlineChangeFn = ev => {
     this.setState({
       curDeadline: ev.target.value
+    });
+  };
+
+  changeURLTextFn = ev => {
+    this.setState({
+      currentURLText: ev.target.value
+    });
+  };
+
+  changeURLFn = ev => {
+    this.setState({
+      currentURL: ev.target.value
     });
   };
 
@@ -188,6 +263,13 @@ class App extends React.Component {
               </InputGroup.Append>
             </InputGroup>
             <ListGroup>
+              {this.state.displayAllContextMenus ? (
+                <MenuItems
+                  tempPosition={this.state.tempPosition}
+                  menuOptionsList={this.state.menuOptionsList}
+                  closeAllCtxMenus={this.closeAllCtxMenus}
+                ></MenuItems>
+              ) : null}
               {this.state.displayTaskCtxMenu ? (
                 <TaskContextMenu
                   closeFn={this.closeFn}
@@ -195,6 +277,17 @@ class App extends React.Component {
                   curDeadline={this.state.curDeadline}
                   tempPosition={this.state.tempPosition}
                 ></TaskContextMenu>
+              ) : null}
+              {this.state.displayLinkCtxMenu ? (
+                <LinkContextMenu
+                  tempPosition={this.state.tempPosition}
+                  closeFn={this.linkCloseFn}
+                  saveFn={this.saveLinkFn}
+                  currentURL={this.state.currentURL}
+                  currentURLText={this.state.currentURLText}
+                  changeURLTextFn={this.changeURLTextFn}
+                  changeURLFn={this.changeURLFn}
+                ></LinkContextMenu>
               ) : null}
               {this.state &&
                 this.state.tasks.map(task => {
@@ -209,6 +302,12 @@ class App extends React.Component {
                         value={task.task}
                         className="menuItembutton"
                       />
+                      <div className="list-link">
+                        <a href={"https://" + task.url} target="_blank">
+                          {task.urlText}
+                        </a>
+                      </div>
+
                       <button
                         onClick={this.showDeadlineContextMenu}
                         value={task.task}

@@ -1,11 +1,11 @@
 .taskContextMenu {
   position: absolute;
   z-index: 2;
+  width: 280px;
+  border: 1px solid;
+  padding: 10px;
+  background-color: ghostwhite;
 }
 
 .deadline-close-btn {
-  position: absolute !important;
-  display: inline-block;
-  top: 0px;
-  left: 190px;
 }
