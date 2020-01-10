@@ -28,6 +28,7 @@ class App extends React.Component {
       loggedin: false,
       curDeadline: "",
       tasks: [],
+      shouldShowColors: false,
       tempPosition: [],
       curTask: "",
       tempTask: "",
@@ -277,6 +278,13 @@ class App extends React.Component {
     });
   };
 
+  showColors = ev => {
+    let curState = ev.currentTarget.value === "true";
+    this.setState({
+      shouldShowColors: !curState
+    });
+  };
+
   render = () => {
     let listId = 0,
       {
@@ -305,8 +313,8 @@ class App extends React.Component {
         linkCloseFn,
         responseFacebook,
         saveLinkFn,
-        saveTime,
-        showDeadlineContextMenu
+        showDeadlineContextMenu,
+        showColors
       } = this;
 
     return (
@@ -316,8 +324,15 @@ class App extends React.Component {
             <div className="nameHeader">
               {"Welcome "}
               <span className="userName">{userName}</span>
-
-              <button onClick={saveTime} className="smallMenuButton"></button>
+              <div className="toggle-container">
+                <button
+                  onClick={showColors}
+                  className={
+                    "smallMenuButton" + " " + this.state.shouldShowColors
+                  }
+                  value={this.state.shouldShowColors}
+                ></button>
+              </div>
             </div>
             <InputGroup className="mb-3">
               <FormControl
@@ -364,6 +379,11 @@ class App extends React.Component {
                 this.state.tasks.map(task => {
                   return (
                     <ListGroup.Item key={listId++}>
+                      {this.state.shouldShowColors ? (
+                        <div
+                          className={"color-status " + task.progressState}
+                        ></div>
+                      ) : null}
                       {task.task}
                       <div className="endTime">
                         {task.end ? Moment(task.end).format("LLLL") : null}
@@ -391,7 +411,7 @@ class App extends React.Component {
                             className="accordion-toggle"
                             eventKey="1"
                           >
-                            Status
+                            Status: {task.progressState}
                           </Accordion.Toggle>
                           <Accordion.Collapse eventKey="1">
                             <Card.Body className="invisible-card-body">

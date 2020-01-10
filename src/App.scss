@@ -57,10 +57,16 @@
   float: right;
   height: 15px;
   border-radius: 15px;
-  opacity: 0.3;
+  &:hover {
+    opacity: 0.9;
+  }
+  &.true {
+    margin-right: 20px;
+    background-color: darkblue;
+  }
 }
-.smallMenuButton:hover {
-  opacity: 0.9;
+.smallMenuButton:focus {
+  outline: 0;
 }
 
 .bootstrap-select {
@@ -112,4 +118,33 @@
 
 .custom-select {
   width: 200px !important;
+}
+
+.toggle-container {
+  height: 25px;
+  width: 40px;
+  display: inline-block;
+  border: 1px solid grey;
+  border-radius: 12px;
+  float: right;
+}
+
+.color-status {
+  position: absolute;
+  /* float: left; */
+  height: 100% !important;
+  width: 10px;
+  background-color: grey;
+  margin-top: -12px;
+  margin-left: -20px;
+  opacity: 0.6;
+  &.defined {
+    background-color: blue;
+  }
+  &.progress {
+    background-color: yellow;
+  }
+  &.completed {
+    background-color: green;
+  }
 }
