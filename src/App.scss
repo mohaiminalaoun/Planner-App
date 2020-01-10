@@ -19,16 +19,29 @@
 .menuItembutton {
   margin-top: 0.5vh;
   background-color: indianred;
+  background: url(assets/trash.svg);
+  border: none;
+  background-repeat: no-repeat;
   float: right;
   height: 15px;
   border-radius: 15px;
+  outline: 0;
+  &:focus {
+    outline-color: red;
+  }
 }
 .menuLinkbutton {
   margin-top: 0.5vh;
   background-color: green;
+  background: url(assets/menu.svg);
+  background-repeat: no-repeat;
   float: right;
   height: 15px;
+  border: none;
   border-radius: 15px;
+  &:focus {
+    outline: 0;
+  }
 }
 .nameHeader {
   padding-bottom: 2vh;
@@ -95,4 +108,8 @@
 .invisible-card-body {
   padding: 0px !important;
   padding-top: 10px !important;
+}
+
+.custom-select {
+  width: 200px !important;
 }

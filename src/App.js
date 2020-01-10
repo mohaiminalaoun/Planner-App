@@ -244,10 +244,6 @@ class App extends React.Component {
   };
   // Function to save the state change of the task
   changeProgressState = param => {
-    console.log("change progress state called");
-    console.log(param);
-    console.log(param.currentTarget);
-    console.log(param.currentTarget.value);
     let progressState = param.currentTarget.value,
       curTask = param.currentTarget.getAttribute("task");
 
@@ -263,8 +259,6 @@ class App extends React.Component {
       .equalsIgnoreCase(curTask)
       .first(item => {
         let firstMatch = item;
-        console.log(firstMatch);
-        console.log(progressState);
         db.tasks.put({
           userName: this.state.userName,
           task: curTask,
@@ -284,60 +278,86 @@ class App extends React.Component {
   };
 
   render = () => {
-    let listId = 0;
+    let listId = 0,
+      {
+        curDeadline,
+        currentURL,
+        currentURLText,
+        curTask,
+        displayAllContextMenus,
+        displayLinkCtxMenu,
+        displayTaskCtxMenu,
+        loggedin,
+        menuOptionsList,
+        tempPosition,
+        userName
+      } = this.state,
+      {
+        addToList,
+        changeProgressState,
+        changeURLFn,
+        changeURLTextFn,
+        closeAllCtxMenus,
+        closeFn,
+        deadlineChangeFn,
+        deleteTask,
+        handleInputChange,
+        linkCloseFn,
+        responseFacebook,
+        saveLinkFn,
+        saveTime,
+        showDeadlineContextMenu
+      } = this;
 
     return (
       <div className="App">
-        {this.state.loggedin ? (
+        {loggedin ? (
           <div className="checklist-container">
             <div className="nameHeader">
               {"Welcome "}
-              <span className="userName">{this.state.userName}</span>
+              <span className="userName">{userName}</span>
 
-              <button
-                onClick={this.saveTime}
-                className="smallMenuButton"
-              ></button>
+              <button onClick={saveTime} className="smallMenuButton"></button>
             </div>
             <InputGroup className="mb-3">
               <FormControl
-                onChange={this.handleInputChange}
-                value={this.state.curTask}
+                onChange={handleInputChange}
+                value={curTask}
                 placeholder="Add task to do"
                 aria-label="Add task to do"
                 aria-describedby="basic-addon2"
               />
               <InputGroup.Append>
-                <Button onClick={this.addToList} variant="outline-secondary">
+                <Button onClick={addToList} variant="outline-secondary">
                   Add
                 </Button>
               </InputGroup.Append>
             </InputGroup>
             <ListGroup>
-              {this.state.displayAllContextMenus ? (
+              {displayAllContextMenus ? (
                 <MenuItems
-                  tempPosition={this.state.tempPosition}
-                  menuOptionsList={this.state.menuOptionsList}
-                  closeAllCtxMenus={this.closeAllCtxMenus}
+                  tempPosition={tempPosition}
+                  menuOptionsList={menuOptionsList}
+                  closeAllCtxMenus={closeAllCtxMenus}
                 ></MenuItems>
               ) : null}
-              {this.state.displayTaskCtxMenu ? (
+              {displayTaskCtxMenu ? (
                 <TaskContextMenu
-                  closeFn={this.closeFn}
-                  changeFn={this.deadlineChangeFn}
-                  curDeadline={this.state.curDeadline}
-                  tempPosition={this.state.tempPosition}
+                  closeFn={closeFn}
+                  changeFn={deadlineChangeFn}
+                  curDeadline={curDeadline}
+                  tempPosition={tempPosition}
                 ></TaskContextMenu>
               ) : null}
-              {this.state.displayLinkCtxMenu ? (
+              {displayLinkCtxMenu ? (
                 <LinkContextMenu
-                  tempPosition={this.state.tempPosition}
-                  closeFn={this.linkCloseFn}
-                  saveFn={this.saveLinkFn}
-                  currentURL={this.state.currentURL}
-                  currentURLText={this.state.currentURLText}
-                  changeURLTextFn={this.changeURLTextFn}
-                  changeURLFn={this.changeURLFn}
+                  tempPosition={tempPosition}
+                  closeFn={linkCloseFn}
+                  saveFn={saveLinkFn}
+                  currentURL={currentURL}
+                  currentURLText={currentURLText}
+                  changeURLTextFn={changeURLTextFn}
+                  changeURLFn={changeURLFn}
                 ></LinkContextMenu>
               ) : null}
               {this.state &&
@@ -349,7 +369,7 @@ class App extends React.Component {
                         {task.end ? Moment(task.end).format("LLLL") : null}
                       </div>
                       <button
-                        onClick={this.deleteTask}
+                        onClick={deleteTask}
                         value={task.task}
                         className="menuItembutton"
                       />
@@ -360,7 +380,7 @@ class App extends React.Component {
                       </div>
 
                       <button
-                        onClick={this.showDeadlineContextMenu}
+                        onClick={showDeadlineContextMenu}
                         value={task.task}
                         className="menuLinkbutton"
                       />
@@ -377,9 +397,10 @@ class App extends React.Component {
                             <Card.Body className="invisible-card-body">
                               {" "}
                               <select
+                                className="custom-select"
                                 value={task.progressState}
                                 task={task.task}
-                                onChange={this.changeProgressState}
+                                onChange={changeProgressState}
                               >
                                 <option value="defined" key="0">
                                   Defined
@@ -404,7 +425,7 @@ class App extends React.Component {
           <FacebookLogin
             appId="176625356093687"
             autoLoad={false}
-            callback={this.responseFacebook}
+            callback={responseFacebook}
             cssClass="my-facebook-button-class"
             fields="name,email,picture"
           />
