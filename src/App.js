@@ -6,7 +6,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TaskContextMenu from "./TaskContextMenu";
 import MenuItems from "./MenuItems";
 import LinkContextMenu from "./LinkContextMenu";
-import { Button, ListGroup, InputGroup, FormControl } from "react-bootstrap";
+import {
+  Button,
+  ListGroup,
+  InputGroup,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Form
+} from "react-bootstrap";
 import db from "./db";
 
 class App extends React.Component {
@@ -59,7 +67,8 @@ class App extends React.Component {
           task: rec.task,
           end: rec.endTime,
           url: rec.url,
-          urlText: rec.urlText
+          urlText: rec.urlText,
+          progressState: rec.progressState
         });
       })
       .then(() => {
@@ -231,6 +240,46 @@ class App extends React.Component {
       currentURL: ev.target.value
     });
   };
+  // Function to save the state change of the task
+  changeProgressState = param => {
+    console.log("change progress state called");
+    console.log(param);
+    console.log(param.currentTarget);
+    console.log(param.currentTarget.value);
+    let progressState = param.currentTarget.value,
+      curTask = param.currentTarget.getAttribute("task");
+
+    let tasks = this.state.tasks.concat();
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].task === curTask) {
+        tasks[i].progressState = progressState;
+        break;
+      }
+    }
+    db.tasks
+      .where("task")
+      .equalsIgnoreCase(curTask)
+      .first(item => {
+        let firstMatch = item;
+        console.log(firstMatch);
+        console.log(progressState);
+        db.tasks.put({
+          userName: this.state.userName,
+          task: curTask,
+          endTime: firstMatch.endTime,
+          url: firstMatch.url,
+          urlText: firstMatch.urlText,
+          progressState: progressState,
+          id: firstMatch.id
+        });
+      });
+    this.setState({
+      displayLinkCtxMenu: false,
+      tasks: tasks,
+      currentURL: "",
+      currentURLText: ""
+    });
+  };
 
   render = () => {
     let listId = 0;
@@ -313,6 +362,21 @@ class App extends React.Component {
                         value={task.task}
                         className="menuLinkbutton"
                       />
+                      <select
+                        value={task.progressState}
+                        task={task.task}
+                        onChange={this.changeProgressState}
+                      >
+                        <option value="defined" key="0">
+                          Defined
+                        </option>
+                        <option value="progress" key="1">
+                          In Progress
+                        </option>
+                        <option value="completed" key="2">
+                          Completed
+                        </option>
+                      </select>
                     </ListGroup.Item>
                   );
                 })}
