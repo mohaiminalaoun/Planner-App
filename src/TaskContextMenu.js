@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import "./TaskContextMenu.scss";
+import PropTypes from "prop-types";
 import { Button, InputGroup, FormControl } from "react-bootstrap";
 
 const TaskContextMenu = props => {
@@ -31,6 +32,13 @@ const TaskContextMenu = props => {
       </InputGroup.Append>
     </div>
   );
+};
+
+TaskContextMenu.propTypes = {
+  changeFn: PropTypes.func,
+  tempPosition: PropTypes.array,
+  curDeadline: PropTypes.string,
+  closeFn: PropTypes.func
 };
 
 export default TaskContextMenu;

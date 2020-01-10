@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import "./LinkContextMenu.scss";
+import PropTypes from "prop-types";
 import { Form, Button, FormControl } from "react-bootstrap";
 
 const LinkContextMenu = props => {
@@ -41,6 +42,15 @@ const LinkContextMenu = props => {
       </Form>
     </div>
   );
+};
+
+LinkContextMenu.propTypes = {
+  changeURLFn: PropTypes.func,
+  currentURL: PropTypes.string,
+  changeURLTextFn: PropTypes.func,
+  currentURLText: PropTypes.string,
+  saveFn: PropTypes.func,
+  closeFn: PropTypes.func
 };
 
 export default LinkContextMenu;
