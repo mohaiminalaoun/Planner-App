@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import "./LinkContextMenu.css";
+import "./LinkContextMenu.scss";
 import { Form, Button, FormControl } from "react-bootstrap";
 
 const LinkContextMenu = props => {

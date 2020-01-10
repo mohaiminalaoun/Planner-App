@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import "./MenuItems.css";
+import "./MenuItems.scss";
 import { Button, ListGroup } from "react-bootstrap";
 
 const MenuItems = props => {

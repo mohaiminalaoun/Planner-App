@@ -74,3 +74,25 @@
   overflow: hidden;
   font-size: 9px;
 }
+.accordion-toggle {
+  border: none !important;
+  float: left;
+  text-align: left;
+  font-size: 9px;
+  opacity: 0.3;
+  padding: 0px;
+}
+.accordion-toggle:focus {
+  outline: 0;
+}
+.accordion-toggle:hover {
+  opacity: 1;
+}
+
+.invisible-card {
+  border: none !important;
+}
+.invisible-card-body {
+  padding: 0px !important;
+  padding-top: 10px !important;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import "./TaskContextMenu.css";
+import "./TaskContextMenu.scss";
 import { Button, InputGroup, FormControl } from "react-bootstrap";
 
 const TaskContextMenu = props => {

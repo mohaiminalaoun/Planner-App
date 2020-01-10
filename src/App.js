@@ -1,6 +1,6 @@
 import React from "react";
 import Moment from "moment";
-import "./App.css";
+import "./App.scss";
 import FacebookLogin from "react-facebook-login";
 import "bootstrap/dist/css/bootstrap.min.css";
 import TaskContextMenu from "./TaskContextMenu";
@@ -13,6 +13,8 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Accordion,
+  Card,
   Form
 } from "react-bootstrap";
 import db from "./db";
@@ -362,21 +364,37 @@ class App extends React.Component {
                         value={task.task}
                         className="menuLinkbutton"
                       />
-                      <select
-                        value={task.progressState}
-                        task={task.task}
-                        onChange={this.changeProgressState}
-                      >
-                        <option value="defined" key="0">
-                          Defined
-                        </option>
-                        <option value="progress" key="1">
-                          In Progress
-                        </option>
-                        <option value="completed" key="2">
-                          Completed
-                        </option>
-                      </select>
+
+                      <Accordion defaultActiveKey="0">
+                        <Card className="invisible-card">
+                          <Accordion.Toggle
+                            className="accordion-toggle"
+                            eventKey="1"
+                          >
+                            Status
+                          </Accordion.Toggle>
+                          <Accordion.Collapse eventKey="1">
+                            <Card.Body className="invisible-card-body">
+                              {" "}
+                              <select
+                                value={task.progressState}
+                                task={task.task}
+                                onChange={this.changeProgressState}
+                              >
+                                <option value="defined" key="0">
+                                  Defined
+                                </option>
+                                <option value="progress" key="1">
+                                  In Progress
+                                </option>
+                                <option value="completed" key="2">
+                                  Completed
+                                </option>
+                              </select>
+                            </Card.Body>
+                          </Accordion.Collapse>
+                        </Card>
+                      </Accordion>
                     </ListGroup.Item>
                   );
                 })}
