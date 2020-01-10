@@ -5,13 +5,14 @@ import PropTypes from "prop-types";
 import { Form, Button, FormControl } from "react-bootstrap";
 
 const LinkContextMenu = props => {
+  let linkContextMenu = React.createRef();
   useEffect(() => {
-    let div = document.getElementById("linkContextMenu");
+    let div = linkContextMenu.current;
     div.style.left = props.tempPosition[0] + "px";
     div.style.top = props.tempPosition[1] + "px";
   });
   return (
-    <div className="linkContextMenu" id="linkContextMenu">
+    <div className="linkContextMenu" ref={linkContextMenu}>
       <Form className="mb-3">
         <Form.Group controlId="formAddURL">
           <FormControl

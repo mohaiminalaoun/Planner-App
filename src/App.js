@@ -298,7 +298,8 @@ class App extends React.Component {
         loggedin,
         menuOptionsList,
         tempPosition,
-        userName
+        userName,
+        shouldShowColors
       } = this.state,
       {
         addToList,
@@ -327,10 +328,8 @@ class App extends React.Component {
               <div className="toggle-container">
                 <button
                   onClick={showColors}
-                  className={
-                    "smallMenuButton" + " " + this.state.shouldShowColors
-                  }
-                  value={this.state.shouldShowColors}
+                  className={"smallMenuButton" + " " + shouldShowColors}
+                  value={shouldShowColors}
                 ></button>
               </div>
             </div>

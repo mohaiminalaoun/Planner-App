@@ -5,13 +5,14 @@ import PropTypes from "prop-types";
 import { Button, InputGroup, FormControl } from "react-bootstrap";
 
 const TaskContextMenu = props => {
+  let contextMenu = React.createRef();
   useEffect(() => {
-    let div = document.getElementById("TaskContextMenu");
+    let div = contextMenu.current;
     div.style.left = props.tempPosition[0] + "px";
     div.style.top = props.tempPosition[1] + "px";
   });
   return (
-    <div className="taskContextMenu" id="TaskContextMenu">
+    <div className="taskContextMenu" ref={contextMenu}>
       <InputGroup className="mb-3">
         <FormControl
           onChange={props.changeFn}
