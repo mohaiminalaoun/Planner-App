@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import "./TaskContextMenu.scss";
 import PropTypes from "prop-types";
+import withHOC from "./withContextMenu";
 import { Button, InputGroup, FormControl } from "react-bootstrap";
 
 const TaskContextMenu = props => {
@@ -42,4 +43,4 @@ TaskContextMenu.propTypes = {
   closeFn: PropTypes.func
 };
 
-export default TaskContextMenu;
+export default withHOC(TaskContextMenu);

@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import "./LinkContextMenu.scss";
 import PropTypes from "prop-types";
+import withHOC from "./withContextMenu";
 import { Form, Button, FormControl } from "react-bootstrap";
 
 const LinkContextMenu = props => {
@@ -54,4 +55,4 @@ LinkContextMenu.propTypes = {
   closeFn: PropTypes.func
 };
 
-export default LinkContextMenu;
+export default withHOC(LinkContextMenu);
