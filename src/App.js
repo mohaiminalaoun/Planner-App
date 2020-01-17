@@ -6,23 +6,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TaskContextMenu from "./TaskContextMenu";
 import MenuItems from "./MenuItems";
 import LinkContextMenu from "./LinkContextMenu";
+import TaskModal from "./TaskModal";
 import {
   Button,
   ListGroup,
   InputGroup,
   FormControl,
-  FormGroup,
-  FormLabel,
   Accordion,
   Card,
-  Form
+  ProgressBar
 } from "react-bootstrap";
 import db from "./db";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    let tasks = [];
 
     this.state = {
       loggedin: false,
@@ -38,6 +36,10 @@ class App extends React.Component {
       displayLinkCtxMenu: false,
       currentURL: "",
       currentURLText: "",
+      showModal: false,
+      currentModalTask: {},
+      currentRichText: "",
+      didRichTextChange: false,
       menuOptionsList: [
         {
           text: "Add deadline",
@@ -165,12 +167,12 @@ class App extends React.Component {
         .equalsIgnoreCase(curTask)
         .first(item => {
           if (Number.isInteger(end)) {
-            let date = new Date();
             firstMatch = item;
             let endTime = Moment().add(end, "hour");
             db.tasks.put({
               userName: this.state.userName,
               task: curTask,
+              richText: firstMatch.richText,
               endTime: endTime._d,
               id: firstMatch.id
             });
@@ -285,6 +287,35 @@ class App extends React.Component {
     });
   };
 
+  openTaskModal = ev => {
+    let clickedTask = ev.currentTarget.getAttribute("value");
+    db.tasks
+      .where("task")
+      .equalsIgnoreCase(clickedTask)
+      .first(item => {
+        this.setState({
+          showModal: true,
+          currentModalTask: item.task,
+          currentModalTaskEnd: item.endTime,
+          currentRichText: item.richText
+        });
+      });
+  };
+
+  handleClose = () => {
+    this.setState({
+      showModal: false
+    });
+  };
+
+  /*function to change current rich text (passed to the modal)*/
+  richTextChange = v => {
+    this.setState({
+      currentRichText: v,
+      didRichTextChange: true
+    });
+  };
+
   render = () => {
     let listId = 0,
       {
@@ -328,11 +359,24 @@ class App extends React.Component {
               <div className="toggle-container">
                 <button
                   onClick={showColors}
-                  className={"smallMenuButton" + " " + shouldShowColors}
+                  className={`smallMenuButton ${shouldShowColors}`}
                   value={shouldShowColors}
                 ></button>
               </div>
             </div>
+            <TaskModal
+              show={this.state.showModal}
+              onHide={this.handleClose}
+              tasks={this.state.tasks}
+              task={this.state.currentTask}
+              userName={this.state.userName}
+              onRichTextChange={this.richTextChange}
+              currentModalTask={this.state.currentModalTask}
+              currentModalTaskEnd={this.state.currentModalTaskEnd}
+              didRichTextChange={this.state.didRichTextChange}
+              richText={this.state.currentRichText}
+              closeFn={this.handleClose}
+            ></TaskModal>
             <InputGroup className="mb-3">
               <FormControl
                 onChange={handleInputChange}
@@ -383,7 +427,13 @@ class App extends React.Component {
                           className={"color-status " + task.progressState}
                         ></div>
                       ) : null}
-                      {task.task}
+                      <span
+                        className="task-title"
+                        value={task.task}
+                        onClick={this.openTaskModal}
+                      >
+                        {task.task}
+                      </span>
                       <div className="endTime">
                         {task.end ? Moment(task.end).format("LLLL") : null}
                       </div>
@@ -410,6 +460,18 @@ class App extends React.Component {
                             className="accordion-toggle"
                             eventKey="1"
                           >
+                            <ProgressBar
+                              striped
+                              now={
+                                !task.progressState
+                                  ? 10
+                                  : task.progressState === "defined"
+                                  ? 10
+                                  : task.progressState === "inprogress"
+                                  ? 60
+                                  : 100
+                              }
+                            />
                             Status: {task.progressState}
                           </Accordion.Toggle>
                           <Accordion.Collapse eventKey="1">
@@ -424,7 +486,7 @@ class App extends React.Component {
                                 <option value="defined" key="0">
                                   Defined
                                 </option>
-                                <option value="progress" key="1">
+                                <option value="inprogress" key="1">
                                   In Progress
                                 </option>
                                 <option value="completed" key="2">

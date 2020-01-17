@@ -98,7 +98,7 @@
   float: left;
   text-align: left;
   font-size: 9px;
-  opacity: 0.3;
+  opacity: 0.8;
   padding: 0px;
 }
 .accordion-toggle:focus {
@@ -139,12 +139,20 @@
   margin-left: -20px;
   opacity: 0.6;
   &.defined {
-    background-color: blue;
-  }
-  &.progress {
     background-color: yellow;
   }
-  &.completed {
+  &.inprogress {
     background-color: green;
   }
+  &.completed {
+    background-color: blue;
+  }
+}
+
+.task-title {
+  cursor: pointer;
+}
+
+.progress {
+  height: 4px !important;
 }
