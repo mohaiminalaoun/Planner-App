@@ -3,7 +3,7 @@ import Moment from "moment";
 import ReactQuill from "react-quill";
 import "./TaskModal.scss";
 import "react-quill/dist/quill.snow.css"; // ES6
-import { Button, InputGroup, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import db from "./db";
 class TaskModal extends React.Component {
   constructor(props) {

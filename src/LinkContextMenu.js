@@ -1,19 +1,16 @@
 import React from "react";
-import { useEffect } from "react";
 import "./LinkContextMenu.scss";
 import PropTypes from "prop-types";
 import withHOC from "./withContextMenu";
 import { Form, Button, FormControl } from "react-bootstrap";
 
 const LinkContextMenu = props => {
-  let linkContextMenu = React.createRef();
-  useEffect(() => {
-    let div = linkContextMenu.current;
-    div.style.left = props.tempPosition[0] + "px";
-    div.style.top = props.tempPosition[1] + "px";
-  });
+  let divStyle = {
+    left: props.tempPosition[0] + "px",
+    top: props.tempPosition[1] + "px"
+  };
   return (
-    <div className="linkContextMenu" ref={linkContextMenu}>
+    <div className="linkContextMenu" style={divStyle}>
       <Form className="mb-3">
         <Form.Group controlId="formAddURL">
           <FormControl
