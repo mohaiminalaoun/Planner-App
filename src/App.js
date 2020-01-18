@@ -62,6 +62,7 @@ class App extends React.Component {
       ]
     };
   }
+  // Function to initialize state with the tasks from the database
   responseFacebook = res => {
     let tasks = [];
     db.tasks
@@ -84,18 +85,24 @@ class App extends React.Component {
         });
       });
   };
+  // Function to add new task to the state and the database
   addToList = ev => {
     if (this.state.curTask.trim().length >= 1) {
-      let curTask = this.state.curTask;
-      let tasks = this.state.tasks;
+      let curTask = this.state.curTask,
+        tasks = this.state.tasks;
       tasks.push({
         task: curTask
       });
-      this.setState({
-        tasks: tasks,
-        curTask: ""
-      });
-      db.tasks.put({ userName: this.state.userName, task: curTask });
+      this.setState(
+        {
+          tasks: tasks,
+          curTask: ""
+        },
+        () => {
+          // we don't add any other details initally
+          db.tasks.put({ userName: this.state.userName, task: curTask });
+        }
+      );
     }
   };
 
@@ -124,13 +131,17 @@ class App extends React.Component {
 
     tasks = tasks.slice(0, idx).concat(tasks.slice(idx + 1, tasks.length));
 
-    this.setState({
-      tasks: tasks
-    });
-    db.tasks
-      .where("task")
-      .equalsIgnoreCase(curTask)
-      .delete();
+    this.setState(
+      {
+        tasks: tasks
+      },
+      () => {
+        db.tasks
+          .where("task")
+          .equalsIgnoreCase(curTask)
+          .delete();
+      }
+    );
   };
 
   // Function to show the context menu
@@ -144,12 +155,9 @@ class App extends React.Component {
   };
 
   closeFn = () => {
-    let tasks = this.state.tasks.concat();
-    let curTask = this.state.tempTask;
-    this.setState({
-      displayTaskCtxMenu: false
-    });
-    let end = parseInt(this.state.curDeadline);
+    let tasks = this.state.tasks.concat(),
+      curTask = this.state.tempTask,
+      end = parseInt(this.state.curDeadline);
     if (Number.isInteger(end)) {
       for (let i = 0; i < tasks.length; i++) {
         if (tasks[i].task === curTask) {
@@ -157,31 +165,35 @@ class App extends React.Component {
           break;
         }
       }
-      this.setState({
-        tasks: tasks
-      });
-
-      let firstMatch;
-      db.tasks
-        .where("task")
-        .equalsIgnoreCase(curTask)
-        .first(item => {
-          if (Number.isInteger(end)) {
-            firstMatch = item;
-            let endTime = Moment().add(end, "hour");
-            db.tasks.put({
-              userName: this.state.userName,
-              task: curTask,
-              richText: firstMatch.richText,
-              endTime: endTime._d,
-              id: firstMatch.id
+      this.setState(
+        {
+          tasks: tasks
+        },
+        () => {
+          let firstMatch;
+          db.tasks
+            .where("task")
+            .equalsIgnoreCase(curTask)
+            .first(item => {
+              if (Number.isInteger(end)) {
+                firstMatch = item;
+                let endTime = Moment().add(end, "hour");
+                db.tasks.put({
+                  userName: this.state.userName,
+                  task: curTask,
+                  richText: firstMatch.richText,
+                  endTime: endTime._d,
+                  id: firstMatch.id
+                });
+              }
             });
-          }
-        });
+        }
+      );
     }
     this.setState({
       tempTask: "",
-      curDeadline: ""
+      curDeadline: "",
+      displayTaskCtxMenu: false
     });
   };
 
@@ -196,9 +208,9 @@ class App extends React.Component {
 
   saveLinkFn = () => {
     let curURL = this.state.currentURL,
-      curURLText = this.state.currentURLText;
-    let tasks = this.state.tasks.concat();
-    let curTask = this.state.tempTask;
+      curURLText = this.state.currentURLText,
+      tasks = this.state.tasks.concat(),
+      curTask = this.state.tempTask;
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].task === curTask) {
         tasks[i].url = curURL;
@@ -248,9 +260,8 @@ class App extends React.Component {
   // Function to save the state change of the task
   changeProgressState = param => {
     let progressState = param.currentTarget.value,
-      curTask = param.currentTarget.getAttribute("task");
-
-    let tasks = this.state.tasks.concat();
+      curTask = param.currentTarget.getAttribute("task"),
+      tasks = this.state.tasks.concat();
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].task === curTask) {
         tasks[i].progressState = progressState;
