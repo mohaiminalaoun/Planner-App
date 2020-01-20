@@ -3,7 +3,7 @@ import Moment from "moment";
 import ReactQuill from "react-quill";
 import "./TaskModal.scss";
 import "react-quill/dist/quill.snow.css"; // ES6
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, InputGroup, Form, Modal } from "react-bootstrap";
 import db from "./db";
 class TaskModal extends React.Component {
   constructor(props) {
@@ -54,10 +54,10 @@ class TaskModal extends React.Component {
               {props.currentModalTask &&
                 "Due by: " + Moment(props.currentModalTaskEnd).format("LLLL")}
             </Form.Label>
-            <ReactQuill
+            {/* <ReactQuill
               value={props.richText}
               onChange={props.onRichTextChange}
-            />
+            /> */}
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

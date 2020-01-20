@@ -139,13 +139,13 @@
   margin-left: -20px;
   opacity: 0.6;
   &.defined {
-    background-color: yellow;
+    background-color: lightgrey;
   }
   &.inprogress {
-    background-color: blue;
+    background-color: green;
   }
   &.completed {
-    background-color: green;
+    background-color: blue;
   }
 }
 
@@ -155,4 +155,19 @@
 
 .progress {
   height: 4px !important;
+}
+
+/* Dashboard*/
+
+.dashboard {
+  height: 120px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid lightgrey;
+  border-radius: 8px;
+}
+
+#mypie {
+  text-align: center;
 }
