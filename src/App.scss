@@ -8,6 +8,11 @@
   width: 200px;
   margin-left: calc(50vw - 100px);
 }
+.logout-button {
+  float: right;
+  margin-left: 10px;
+  font-size: 10pt !important; /*Do disable bootstrap btn style*/
+}
 
 .checklist-container {
   width: 400px;

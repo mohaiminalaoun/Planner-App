@@ -65,6 +65,7 @@ class App extends React.Component {
   }
   responseFacebook = res => {
     let tasks = [];
+    window.localStorage.setItem("todousername", res.name);
     db.tasks
       .where("userName")
       .equalsIgnoreCase(res.name)
@@ -84,6 +85,16 @@ class App extends React.Component {
           tasks: tasks
         });
       });
+  };
+
+  logOutFacebook = () => {
+    window.localStorage.removeItem("todousername");
+    window.FB.logout();
+    this.setState({
+      loggedin: false,
+      userName: "User",
+      tasks: []
+    });
   };
   addToList = ev => {
     if (this.state.curTask.trim().length >= 1) {
@@ -320,6 +331,14 @@ class App extends React.Component {
     });
   };
 
+  componentDidMount = () => {
+    if (window.localStorage.getItem("todousername") !== null) {
+      this.responseFacebook({
+        name: window.localStorage.getItem("todousername")
+      });
+    }
+  };
+
   render = () => {
     let listId = 0,
       {
@@ -357,6 +376,13 @@ class App extends React.Component {
       <div className="App">
         {loggedin ? (
           <div className="checklist-container">
+            <Button
+              variant="secondary"
+              className="logout-button"
+              onClick={this.logOutFacebook}
+            >
+              {"Log out"}
+            </Button>
             <div className="nameHeader">
               {"Welcome "}
               <span className="userName">{userName}</span>
