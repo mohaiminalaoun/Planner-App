@@ -8,6 +8,7 @@ import MenuItems from "./MenuItems";
 import LinkContextMenu from "./LinkContextMenu";
 import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
+import { connect } from "react-redux";
 import {
   Button,
   ListGroup,
@@ -24,14 +25,12 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      loggedin: false,
       curDeadline: "",
       tasks: [],
       shouldShowColors: false,
       tempPosition: [],
       curTask: "",
       tempTask: "",
-      userName: "",
       displayAllContextMenus: false,
       displayTaskCtxMenu: false,
       displayLinkCtxMenu: false,
@@ -79,9 +78,11 @@ class App extends React.Component {
         });
       })
       .then(() => {
-        this.setState({
+        this.props.facebookLoginDispatch({
           loggedin: true,
-          userName: res.name,
+          userName: res.name //,
+        });
+        this.setState({
           tasks: tasks
         });
       });
@@ -90,10 +91,9 @@ class App extends React.Component {
   logOutFacebook = () => {
     window.localStorage.removeItem("todousername");
     window.FB.logout();
-    this.setState({
+    this.props.facebookLoginDispatch({
       loggedin: false,
-      userName: "User",
-      tasks: []
+      userName: "User"
     });
   };
   addToList = ev => {
@@ -324,7 +324,6 @@ class App extends React.Component {
 
   /*function to change current rich text (passed to the modal)*/
   richTextChange = v => {
-    console.log(v);
     this.setState({
       currentRichText: v,
       didRichTextChange: true
@@ -349,10 +348,8 @@ class App extends React.Component {
         displayAllContextMenus,
         displayLinkCtxMenu,
         displayTaskCtxMenu,
-        loggedin,
         menuOptionsList,
         tempPosition,
-        userName,
         shouldShowColors
       } = this.state,
       {
@@ -371,6 +368,8 @@ class App extends React.Component {
         showDeadlineContextMenu,
         showColors
       } = this;
+
+    let { loggedin, userName } = this.props;
 
     return (
       <div className="App">
@@ -551,5 +550,17 @@ class App extends React.Component {
     );
   };
 }
+const mapStateToProps = state => ({
+  loggedin: state.loggedin,
+  userName: state.userName
+});
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    facebookLoginDispatch: info => {
+      dispatch({ type: "facebookLogin", payload: info });
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App); // export connected component
