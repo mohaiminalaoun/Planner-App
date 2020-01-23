@@ -5,12 +5,8 @@ import withHOC from "./withContextMenu";
 import { Form, Button, FormControl } from "react-bootstrap";
 
 const LinkContextMenu = props => {
-  let divStyle = {
-    left: props.tempPosition[0] + "px",
-    top: props.tempPosition[1] + "px"
-  };
   return (
-    <div className="linkContextMenu" style={divStyle}>
+    <div className="linkContextMenu" style={props.divStyle}>
       <Form className="mb-3">
         <Form.Group controlId="formAddURL">
           <FormControl

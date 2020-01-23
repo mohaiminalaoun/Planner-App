@@ -5,12 +5,12 @@ import withHOC from "./withContextMenu";
 import { Form, Button, FormControl } from "react-bootstrap";
 
 const LabelContextMenu = props => {
-  let divStyle = {
-    left: props.tempPosition[0] + "px",
-    top: props.tempPosition[1] + "px"
-  };
+  // let divStyle = {
+  //   left: props.tempPosition[0] + "px",
+  //   top: props.tempPosition[1] + "px"
+  // };
   return (
-    <div className="labelContextMenu" style={divStyle}>
+    <div className="labelContextMenu" style={props.divStyle}>
       <Form className="mb-3">
         <Form.Group controlId="formAddLabel">
           <FormControl

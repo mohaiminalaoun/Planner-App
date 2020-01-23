@@ -5,13 +5,8 @@ import withHOC from "./withContextMenu";
 import { Button, InputGroup, FormControl } from "react-bootstrap";
 
 const TaskContextMenu = props => {
-  var divStyle = {
-    left: props.tempPosition[0] + "px",
-    top: props.tempPosition[1] + "px"
-  };
-
   return (
-    <div className="taskContextMenu" style={divStyle}>
+    <div className="taskContextMenu" style={props.divStyle}>
       <InputGroup className="mb-3">
         <FormControl
           onChange={props.changeFn}
