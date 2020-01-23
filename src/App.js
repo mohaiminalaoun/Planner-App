@@ -3,9 +3,10 @@ import Moment from "moment";
 import "./App.scss";
 import FacebookLogin from "react-facebook-login";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TaskContextMenu from "./TaskContextMenu";
+import TaskContextMenu from "./contextMenus/TaskContextMenu";
 import MenuItems from "./MenuItems";
-import LinkContextMenu from "./LinkContextMenu";
+import LinkContextMenu from "./contextMenus/LinkContextMenu";
+import LabelContextMenu from "./contextMenus/LabelContextMenu";
 import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
 import { connect } from "react-redux";
@@ -16,7 +17,8 @@ import {
   FormControl,
   Accordion,
   Card,
-  ProgressBar
+  ProgressBar,
+  Badge
 } from "react-bootstrap";
 import db from "./db";
 
@@ -34,11 +36,13 @@ class App extends React.Component {
       displayAllContextMenus: false,
       displayTaskCtxMenu: false,
       displayLinkCtxMenu: false,
+      displayLabelCtxMenu: false,
       currentURL: "",
       currentURLText: "",
       showModal: false,
       currentModalTask: {},
       currentRichText: "",
+      currentLabel: "",
       didRichTextChange: false,
       menuOptionsList: [
         {
@@ -58,6 +62,15 @@ class App extends React.Component {
               displayLinkCtxMenu: true
             });
           }
+        },
+        {
+          text: "Add Label",
+          onClick: () => {
+            this.setState({
+              displayAllContextMenus: false,
+              displayLabelCtxMenu: true
+            });
+          }
         }
       ]
     };
@@ -74,7 +87,8 @@ class App extends React.Component {
           end: rec.endTime,
           url: rec.url,
           urlText: rec.urlText,
-          progressState: rec.progressState
+          progressState: rec.progressState,
+          label: rec.label
         });
       })
       .then(() => {
@@ -107,7 +121,7 @@ class App extends React.Component {
         tasks: tasks,
         curTask: ""
       });
-      db.tasks.put({ userName: this.state.userName, task: curTask });
+      db.tasks.put({ userName: this.props.userName, task: curTask });
     }
   };
 
@@ -182,7 +196,7 @@ class App extends React.Component {
             firstMatch = item;
             let endTime = Moment().add(end, "hour");
             db.tasks.put({
-              userName: this.state.userName,
+              userName: this.props.userName,
               task: curTask,
               richText: firstMatch.richText,
               endTime: endTime._d,
@@ -224,7 +238,7 @@ class App extends React.Component {
       .first(item => {
         let firstMatch = item;
         db.tasks.put({
-          userName: this.state.userName,
+          userName: this.props.userName,
           task: curTask,
           endTime: firstMatch.endTime,
           url: curURL,
@@ -277,7 +291,7 @@ class App extends React.Component {
       .first(item => {
         let firstMatch = item;
         db.tasks.put({
-          userName: this.state.userName,
+          userName: this.props.userName,
           task: curTask,
           endTime: firstMatch.endTime,
           url: firstMatch.url,
@@ -338,6 +352,55 @@ class App extends React.Component {
     }
   };
 
+  saveLabel = () => {
+    console.log(this.state);
+    let curLabel = this.state.currentLabel,
+      curTask = this.state.tempTask;
+    db.tasks
+      .where("task")
+      .equalsIgnoreCase(curTask)
+      .first(item => {
+        let firstMatch = item;
+        db.tasks.put({
+          userName: this.props.userName,
+          task: curTask,
+          endTime: firstMatch.endTime,
+          url: firstMatch.url,
+          urlText: firstMatch.urlText,
+          progressState: firstMatch.progressState,
+          id: firstMatch.id,
+          label: curLabel
+        });
+      });
+    let tasks = this.state.tasks.concat();
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].task === curTask) {
+        tasks[i].label = curLabel;
+        break;
+      }
+    }
+    this.setState({
+      displayAllContextMenus: false,
+      displayLabelCtxMenu: false,
+      currentLabel: "",
+      tasks: tasks
+    });
+  };
+
+  cancelSaveLabel = () => {
+    this.setState({
+      displayAllContextMenus: false,
+      displayLabelCtxMenu: false,
+      currentLabel: ""
+    });
+  };
+
+  currentLabelChange = v => {
+    this.setState({
+      currentLabel: v.currentTarget.value
+    });
+  };
+
   render = () => {
     let listId = 0,
       {
@@ -348,6 +411,7 @@ class App extends React.Component {
         displayAllContextMenus,
         displayLinkCtxMenu,
         displayTaskCtxMenu,
+        displayLabelCtxMenu,
         menuOptionsList,
         tempPosition,
         shouldShowColors
@@ -366,7 +430,9 @@ class App extends React.Component {
         responseFacebook,
         saveLinkFn,
         showDeadlineContextMenu,
-        showColors
+        showColors,
+        saveLabel,
+        cancelSaveLabel
       } = this;
 
     let { loggedin, userName } = this.props;
@@ -398,7 +464,7 @@ class App extends React.Component {
               onHide={this.handleClose}
               tasks={this.state.tasks}
               task={this.state.currentTask}
-              userName={this.state.userName}
+              userName={this.props.userName}
               onRichTextChange={this.richTextChange}
               currentModalTask={this.state.currentModalTask}
               currentModalTaskEnd={this.state.currentModalTaskEnd}
@@ -450,6 +516,15 @@ class App extends React.Component {
                   changeURLFn={changeURLFn}
                 ></LinkContextMenu>
               ) : null}
+              {displayLabelCtxMenu ? (
+                <LabelContextMenu
+                  tempPosition={tempPosition}
+                  saveLabel={saveLabel}
+                  currentLabel={this.state.currentLabel}
+                  cancelSaveLabel={cancelSaveLabel}
+                  currentLabelChange={this.currentLabelChange}
+                />
+              ) : null}
               {this.state &&
                 this.state.tasks.map(task => {
                   return (
@@ -485,7 +560,11 @@ class App extends React.Component {
                         value={task.task}
                         className="menuLinkbutton"
                       />
-
+                      {!task.label ? null : (
+                        <Badge className="genericLabel" variant="warning">
+                          {task.label}
+                        </Badge>
+                      )}
                       <Accordion defaultActiveKey="0">
                         <Card className="invisible-card">
                           <Accordion.Toggle
