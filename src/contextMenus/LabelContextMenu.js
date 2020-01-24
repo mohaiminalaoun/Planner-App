@@ -3,7 +3,7 @@ import "./LabelContextMenu.scss";
 import PropTypes from "prop-types";
 import withHOC from "./withContextMenu";
 import { useState } from "react";
-import { Form, Button, FormControl } from "react-bootstrap";
+import { Form, Button, FormControl, Badge } from "react-bootstrap";
 
 const LabelContextMenu = props => {
   const badgeOptions = [
@@ -27,7 +27,30 @@ const LabelContextMenu = props => {
           props.selectedLabelIdxChange(idx);
         }}
       ></div>
-    ));
+    )),
+    prevUsedLabels = [];
+  props.labels.forEach(label => {
+    prevUsedLabels.push(label);
+  });
+
+  const clickPrevUsedLabel = ev => {
+    props.currentLabelChangeByClick(ev.currentTarget.getAttribute("value"));
+  };
+  let id = -1;
+  const prevUsedLabelsDisplay = prevUsedLabels.map(label => {
+    id++;
+    return (
+      <Badge
+        key={id}
+        className="prevUsedLabel"
+        variant="warning"
+        onClick={clickPrevUsedLabel}
+        value={label}
+      >
+        {label}
+      </Badge>
+    );
+  });
   return (
     <div className="labelContextMenu" style={props.divStyle}>
       <Form className="mb-3">
@@ -42,6 +65,7 @@ const LabelContextMenu = props => {
         </Form.Group>
         <h6 className="badge-container-heading">Choose color</h6>
         <div className="badge-container">{badgesDiv}</div>
+        <div className="prevBadgeContainer">{prevUsedLabelsDisplay} </div>
         <div>
           <Button
             variant="primary"

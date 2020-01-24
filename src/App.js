@@ -45,6 +45,7 @@ class App extends React.Component {
       currentLabel: "",
       didRichTextChange: false,
       selectedLabelIdx: 0,
+      labels: new Set(),
       menuOptionsList: [
         {
           text: "Add deadline",
@@ -84,12 +85,16 @@ class App extends React.Component {
     };
   }
   responseFacebook = res => {
-    let tasks = [];
+    let tasks = [],
+      labels = new Set(); // we're going to use a Set to store the labels
     window.localStorage.setItem("todousername", res.name);
     db.tasks
       .where("userName")
       .equalsIgnoreCase(res.name)
       .each(rec => {
+        if (rec.label) {
+          labels.add(rec.label);
+        }
         tasks.push({
           task: rec.task,
           end: rec.endTime,
@@ -106,7 +111,8 @@ class App extends React.Component {
           userName: res.name //,
         });
         this.setState({
-          tasks: tasks
+          tasks: tasks,
+          labels: labels
         });
       });
   };
@@ -362,9 +368,10 @@ class App extends React.Component {
   };
 
   saveLabel = () => {
-    console.log(this.state);
     let curLabel = this.state.currentLabel,
-      curTask = this.state.tempTask;
+      curTask = this.state.tempTask,
+      stateLabels = this.state.labels;
+    stateLabels.add(curLabel);
     db.tasks
       .where("task")
       .equalsIgnoreCase(curTask)
@@ -394,7 +401,8 @@ class App extends React.Component {
       displayAllContextMenus: false,
       displayLabelCtxMenu: false,
       currentLabel: "",
-      tasks: tasks
+      tasks: tasks,
+      labels: stateLabels
     });
   };
 
@@ -415,6 +423,11 @@ class App extends React.Component {
   selectedLabelIdxChange = v => {
     this.setState({
       selectedLabelIdx: v
+    });
+  };
+  currentLabelChangeByClick = v => {
+    this.setState({
+      currentLabel: v
     });
   };
 
@@ -556,6 +569,8 @@ class App extends React.Component {
                     currentLabelChange={this.currentLabelChange}
                     selectedLabelIdx={this.state.selectedLabelIdx}
                     selectedLabelIdxChange={this.selectedLabelIdxChange}
+                    labels={this.state.labels}
+                    currentLabelChangeByClick={this.currentLabelChangeByClick}
                   />
                 ) : null}
                 {this.state &&

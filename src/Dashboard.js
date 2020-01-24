@@ -8,11 +8,11 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    PieChart.createPieChart(this.props);
+    PieChart.createPieChart(this.props, "label");
   }
 
   componentDidUpdate() {
-    PieChart.createPieChart(this.props);
+    PieChart.createPieChart(this.props, "label");
   }
 
   render() {

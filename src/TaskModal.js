@@ -54,10 +54,12 @@ class TaskModal extends React.Component {
               {props.currentModalTask &&
                 "Due by: " + Moment(props.currentModalTaskEnd).format("LLLL")}
             </Form.Label>
-            {/* <ReactQuill
-              value={props.richText}
-              onChange={props.onRichTextChange}
-            /> */}
+            {
+              <ReactQuill
+                value={props.richText}
+                onChange={props.onRichTextChange}
+              />
+            }
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

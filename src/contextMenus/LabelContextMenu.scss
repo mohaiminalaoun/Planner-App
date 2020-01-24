@@ -54,3 +54,13 @@
   padding-bottom: 8px;
   border-bottom: 1px solid grey;
 }
+.prevBadgeContainer {
+  display: flex;
+}
+.prevUsedLabel {
+  margin: 5px;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid black;
+  }
+}

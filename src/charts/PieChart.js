@@ -8,18 +8,29 @@ const COLOR_PROGRESS = "#3CB371",
   STATE_UNDEFINED = "undefined",
   STATE_COMPLETED = "completed";
 
-const createPieChart = props => {
+const createPieChart = (props, filterBy) => {
   if (document.getElementById("mypie")) {
     d3.selectAll("svg").remove();
   }
   let data = {};
+
   props.tasks.forEach(t => {
-    if (!data[t.progressState]) {
-      data[t.progressState] = 1;
-    } else {
-      data[t.progressState]++;
+    if (filterBy === "progressState") {
+      if (!data[t.progressState]) {
+        data[t.progressState] = 1;
+      } else {
+        data[t.progressState]++;
+      }
+    } else if (filterBy === "label") {
+      if (!data[t.label]) {
+        data[t.label] = 1;
+      } else {
+        data[t.label]++;
+      }
     }
   });
+
+  console.log(data);
   const width = 150,
     height = 100,
     margin = 20;
@@ -52,8 +63,15 @@ const createPieChart = props => {
   let pie = d3.pie().value(function(d) {
     return d.value;
   });
-  let data_ready = pie(d3.entries(data));
-
+  let data_ready = pie(d3.entries(data)),
+    arcs = pie(d3.entries(data)),
+    arcLabel = () => {
+      const radius = (Math.min(width, height) / 2) * 0.8;
+      return d3
+        .arc()
+        .innerRadius(radius)
+        .outerRadius(radius);
+    };
   // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
   svg
     .selectAll("whatever")
@@ -72,52 +90,89 @@ const createPieChart = props => {
     })
     .attr("stroke", "lightgrey")
     .style("stroke-width", "1px")
-    .style("opacity", 0.8);
+    .append("title")
+    .text(d => `Hello`);
 
-  svg2
-    .append("circle")
-    .attr("cx", 7)
-    .attr("cy", 5)
-    .attr("r", 6)
-    .style("fill", "#3CB371");
+  svg
+    .append("g")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", 12)
+    .attr("text-anchor", "middle")
+    .selectAll("text")
+    .data(arcs)
+    .join("text")
+    //  .attr("transform", d => `translate(${arcLabel.centroid(d)})`)
+    .attr("transform", function(d) {
+      console.log("in transform");
+      console.log(d);
+      // TODO: figure out how to calculate translate with startAngle and endAngle and radius
+      return `translate(${-d.startAngle * 5},${-d.endAngle * 5})`;
+    })
+    .call(text =>
+      text
+        .append("tspan")
+        .attr("y", "-0.4em")
+        .attr("font-weight", "bold")
+        .text(d => {
+          console.log("d is " + d);
+          return d.data.key;
+        })
+    );
+  // .call(text =>
+  //   text
+  //     .filter(d => d && d.endAngle - d.startAngle > 0.25)
+  //     .append("tspan")
+  //     .attr("x", 0)
+  //     .attr("y", "0.7em")
+  //     .attr("fill-opacity", 1)
+  //     .text(d => d.data.key)
+  // );
 
-  svg2
-    .append("circle")
-    .attr("cx", 7)
-    .attr("cy", 20)
-    .attr("r", 6)
-    .style("fill", "#1E90FF");
-
-  svg2
-    .append("circle")
-    .attr("cx", 7)
-    .attr("cy", 35)
-    .attr("r", 6)
-    .style("fill", "#868f97");
-
-  svg2
-    .append("text")
-    .attr("x", 15)
-    .attr("y", 5)
-    .text("In Progress")
-    .style("font-size", "8px")
-    .attr("alignment-baseline", "middle");
-
-  svg2
-    .append("text")
-    .attr("x", 15)
-    .attr("y", 20)
-    .text("Completed")
-    .style("font-size", "8px")
-    .attr("alignment-baseline", "middle");
-
-  svg2
-    .append("text")
-    .attr("x", 15)
-    .attr("y", 35)
-    .text("Defined")
-    .style("font-size", "8px")
-    .attr("alignment-baseline", "middle");
+  //
+  // svg2
+  //   .append("circle")
+  //   .attr("cx", 7)
+  //   .attr("cy", 5)
+  //   .attr("r", 6)
+  //   .style("fill", "#3CB371");
+  //
+  // svg2
+  //   .append("circle")
+  //   .attr("cx", 7)
+  //   .attr("cy", 20)
+  //   .attr("r", 6)
+  //   .style("fill", "#1E90FF");
+  //
+  // svg2
+  //   .append("circle")
+  //   .attr("cx", 7)
+  //   .attr("cy", 35)
+  //   .attr("r", 6)
+  //   .style("fill", "#868f97");
+  //
+  // svg2
+  //   .append("text")
+  //   .attr("x", 15)
+  //   .attr("y", 5)
+  //   .text("In Progress")
+  //   .style("font-size", "8px")
+  //   .attr("alignment-baseline", "middle");
+  //
+  // svg2
+  //   .append("text")
+  //   .attr("x", 15)
+  //   .attr("y", 20)
+  //   .text("Completed")
+  //   .style("font-size", "8px")
+  //   .attr("alignment-baseline", "middle");
+  //
+  // svg2
+  //   .append("text")
+  //   .attr("x", 15)
+  //   .attr("y", 35)
+  //   .text("Defined")
+  //   .style("font-size", "8px")
+  //   .attr("alignment-baseline", "middle");
 };
 
 export { createPieChart };
