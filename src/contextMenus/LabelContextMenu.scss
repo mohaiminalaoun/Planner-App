@@ -8,3 +8,49 @@
 .okContextMenuBtn {
   margin-right: 8px;
 }
+.badge-container {
+  display: flex;
+  padding-bottom: 8px;
+}
+
+.badgeOption {
+  margin: 4px;
+  width: 8px;
+  height: 8px;
+  &:hover {
+    transform: scale(1.5);
+  }
+  &.clicked {
+    transform: scale(1.5);
+    border: 1px solid black;
+  }
+  &.primary {
+    background-color: #007bff;
+  }
+  &.secondary {
+    background-color: #6c757d;
+  }
+  &.success {
+    background-color: #28a745;
+  }
+  &.danger {
+    background-color: #dc3545;
+  }
+  &.warning {
+    background-color: #ffc107;
+  }
+  &.info {
+    background-color: #17a2b8;
+  }
+  &.light {
+    background-color: #f8f9fa;
+  }
+  &.dark {
+    background-color: #343a40;
+  }
+}
+
+.badge-container-heading {
+  padding-bottom: 8px;
+  border-bottom: 1px solid grey;
+}

@@ -2,13 +2,32 @@ import React from "react";
 import "./LabelContextMenu.scss";
 import PropTypes from "prop-types";
 import withHOC from "./withContextMenu";
+import { useState } from "react";
 import { Form, Button, FormControl } from "react-bootstrap";
 
 const LabelContextMenu = props => {
-  // let divStyle = {
-  //   left: props.tempPosition[0] + "px",
-  //   top: props.tempPosition[1] + "px"
-  // };
+  const badgeOptions = [
+      "secondary",
+      "success",
+      "danger",
+      "warning",
+      "info",
+      "light",
+      "dark"
+    ],
+    badgesDiv = badgeOptions.map((item, idx) => (
+      <div
+        key={idx}
+        className={
+          "badgeOption " +
+          item +
+          (idx === props.selectedLabelIdx ? " clicked" : "")
+        }
+        onClick={() => {
+          props.selectedLabelIdxChange(idx);
+        }}
+      ></div>
+    ));
   return (
     <div className="labelContextMenu" style={props.divStyle}>
       <Form className="mb-3">
@@ -21,6 +40,8 @@ const LabelContextMenu = props => {
             onChange={props.currentLabelChange}
           />
         </Form.Group>
+        <h6 className="badge-container-heading">Choose color</h6>
+        <div className="badge-container">{badgesDiv}</div>
         <div>
           <Button
             variant="primary"

@@ -44,6 +44,7 @@ class App extends React.Component {
       currentRichText: "",
       currentLabel: "",
       didRichTextChange: false,
+      selectedLabelIdx: 0,
       menuOptionsList: [
         {
           text: "Add deadline",
@@ -66,9 +67,16 @@ class App extends React.Component {
         {
           text: "Add Label",
           onClick: () => {
+            let curLabel = "";
+            this.state.tasks.forEach(task => {
+              if (task.task === this.state.tempTask) {
+                curLabel = task.label;
+              }
+            });
             this.setState({
               displayAllContextMenus: false,
-              displayLabelCtxMenu: true
+              displayLabelCtxMenu: true,
+              currentLabel: curLabel
             });
           }
         }
@@ -88,7 +96,8 @@ class App extends React.Component {
           url: rec.url,
           urlText: rec.urlText,
           progressState: rec.progressState,
-          label: rec.label
+          label: rec.label,
+          selectedLabelIdx: rec.selectedLabelIdx
         });
       })
       .then(() => {
@@ -369,13 +378,15 @@ class App extends React.Component {
           urlText: firstMatch.urlText,
           progressState: firstMatch.progressState,
           id: firstMatch.id,
-          label: curLabel
+          label: curLabel,
+          selectedLabelIdx: this.state.selectedLabelIdx
         });
       });
     let tasks = this.state.tasks.concat();
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].task === curTask) {
         tasks[i].label = curLabel;
+        tasks[i].selectedLabelIdx = this.state.selectedLabelIdx;
         break;
       }
     }
@@ -398,6 +409,12 @@ class App extends React.Component {
   currentLabelChange = v => {
     this.setState({
       currentLabel: v.currentTarget.value
+    });
+  };
+
+  selectedLabelIdxChange = v => {
+    this.setState({
+      selectedLabelIdx: v
     });
   };
 
@@ -436,6 +453,16 @@ class App extends React.Component {
       } = this;
 
     let { loggedin, userName } = this.props;
+
+    const badgeOptions = [
+      "secondary",
+      "success",
+      "danger",
+      "warning",
+      "info",
+      "light",
+      "dark"
+    ];
 
     return (
       <>
@@ -525,7 +552,10 @@ class App extends React.Component {
                     saveLabel={saveLabel}
                     currentLabel={this.state.currentLabel}
                     cancelSaveLabel={cancelSaveLabel}
+                    tempTask={this.state.tempTask}
                     currentLabelChange={this.currentLabelChange}
+                    selectedLabelIdx={this.state.selectedLabelIdx}
+                    selectedLabelIdxChange={this.selectedLabelIdxChange}
                   />
                 ) : null}
                 {this.state &&
@@ -564,7 +594,10 @@ class App extends React.Component {
                           className="menuLinkbutton"
                         />
                         {!task.label ? null : (
-                          <Badge className="genericLabel" variant="warning">
+                          <Badge
+                            className="genericLabel"
+                            variant={badgeOptions[task.selectedLabelIdx]}
+                          >
                             {task.label}
                           </Badge>
                         )}
