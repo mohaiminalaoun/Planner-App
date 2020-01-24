@@ -22,17 +22,13 @@ const MenuItems = props => {
   return (
     <ListGroup className="menuItems" id="menuItems" style={divStyle}>
       {options}
-      <Button variant="secondary" onClick={props.closeAllCtxMenus}>
-        Close
-      </Button>
     </ListGroup>
   );
 };
 
 MenuItems.propTypes = {
   tempPosition: PropTypes.array,
-  menuOptionsList: PropTypes.array,
-  closeAllCtxMenus: PropTypes.func
+  menuOptionsList: PropTypes.array
 };
 
 export default MenuItems;

@@ -22,7 +22,11 @@ const LabelContextMenu = props => {
           />
         </Form.Group>
         <div>
-          <Button variant="primary" onClick={props.saveLabel}>
+          <Button
+            variant="primary"
+            className="okContextMenuBtn"
+            onClick={props.saveLabel}
+          >
             Ok
           </Button>
           <Button variant="secondary" onClick={props.cancelSaveLabel}>

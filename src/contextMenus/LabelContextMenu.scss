@@ -1,6 +1,10 @@
 .labelContextMenu {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   background-color: lightsteelblue;
   padding: 8px;
+}
+
+.okContextMenuBtn {
+  margin-right: 8px;
 }

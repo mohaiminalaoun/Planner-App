@@ -27,7 +27,11 @@ const LinkContextMenu = props => {
           />
         </Form.Group>
         <div>
-          <Button variant="primary" onClick={props.saveFn}>
+          <Button
+            variant="primary"
+            className="okContextMenuBtn"
+            onClick={props.saveFn}
+          >
             Ok
           </Button>
           <Button variant="secondary" onClick={props.closeFn}>

@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./ContextMenu.scss";
 const withHOC = OriginalComponent => {
   class NewComponent extends React.Component {
     render() {
