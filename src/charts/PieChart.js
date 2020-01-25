@@ -118,61 +118,6 @@ const createPieChart = (props, filterBy) => {
           return d.data.key;
         })
     );
-  // .call(text =>
-  //   text
-  //     .filter(d => d && d.endAngle - d.startAngle > 0.25)
-  //     .append("tspan")
-  //     .attr("x", 0)
-  //     .attr("y", "0.7em")
-  //     .attr("fill-opacity", 1)
-  //     .text(d => d.data.key)
-  // );
-
-  //
-  // svg2
-  //   .append("circle")
-  //   .attr("cx", 7)
-  //   .attr("cy", 5)
-  //   .attr("r", 6)
-  //   .style("fill", "#3CB371");
-  //
-  // svg2
-  //   .append("circle")
-  //   .attr("cx", 7)
-  //   .attr("cy", 20)
-  //   .attr("r", 6)
-  //   .style("fill", "#1E90FF");
-  //
-  // svg2
-  //   .append("circle")
-  //   .attr("cx", 7)
-  //   .attr("cy", 35)
-  //   .attr("r", 6)
-  //   .style("fill", "#868f97");
-  //
-  // svg2
-  //   .append("text")
-  //   .attr("x", 15)
-  //   .attr("y", 5)
-  //   .text("In Progress")
-  //   .style("font-size", "8px")
-  //   .attr("alignment-baseline", "middle");
-  //
-  // svg2
-  //   .append("text")
-  //   .attr("x", 15)
-  //   .attr("y", 20)
-  //   .text("Completed")
-  //   .style("font-size", "8px")
-  //   .attr("alignment-baseline", "middle");
-  //
-  // svg2
-  //   .append("text")
-  //   .attr("x", 15)
-  //   .attr("y", 35)
-  //   .text("Defined")
-  //   .style("font-size", "8px")
-  //   .attr("alignment-baseline", "middle");
 };
 
 export { createPieChart };

@@ -20,25 +20,25 @@ class TaskModal extends React.Component {
         taskObj = t;
       }
     });
-    this.props.closeFn();
     db.tasks
       .where("task")
       .equalsIgnoreCase(this.props.currentModalTask)
       .first(item => {
-        if (item && this.props.didRichTextChange) {
+        if (item) {
+          console.log(`found item`);
           db.tasks.put({
             userName: this.props.userName,
             task: this.props.currentModalTask,
             endTime: taskObj.end,
             richText: this.props.richText,
-            id: item.id
+            id: item.id,
+            label: item.label,
+            selectedLabelIdx: item.selectedLabelIdx
           });
         }
       })
       .then(() => {
-        this.setState({
-          didTextChange: false
-        });
+        this.props.closeFn();
       });
   };
   render() {
@@ -56,7 +56,7 @@ class TaskModal extends React.Component {
             </Form.Label>
             {
               <ReactQuill
-                value={props.richText}
+                value={props.richText || ""}
                 onChange={props.onRichTextChange}
               />
             }

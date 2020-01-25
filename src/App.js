@@ -345,7 +345,7 @@ class App extends React.Component {
       });
   };
 
-  handleClose = () => {
+  handleQuillClose = () => {
     this.setState({
       showModal: false
     });
@@ -505,7 +505,7 @@ class App extends React.Component {
               </div>
               <TaskModal
                 show={this.state.showModal}
-                onHide={this.handleClose}
+                onHide={this.handleQuillClose}
                 tasks={this.state.tasks}
                 task={this.state.currentTask}
                 userName={this.props.userName}
@@ -514,7 +514,7 @@ class App extends React.Component {
                 currentModalTaskEnd={this.state.currentModalTaskEnd}
                 didRichTextChange={this.state.didRichTextChange}
                 richText={this.state.currentRichText}
-                closeFn={this.handleClose}
+                closeFn={this.handleQuillClose}
               ></TaskModal>
               {this.state.shouldShowColors ? (
                 <Dashboard tasks={this.state.tasks} />
