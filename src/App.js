@@ -184,7 +184,7 @@ class App extends React.Component {
     });
   };
 
-  closeFn = () => {
+  endTimeCloseFn = () => {
     let tasks = this.state.tasks.concat();
     let curTask = this.state.tempTask;
     this.setState({
@@ -215,7 +215,9 @@ class App extends React.Component {
               task: curTask,
               richText: firstMatch.richText,
               endTime: endTime._d,
-              id: firstMatch.id
+              id: firstMatch.id,
+              label: firstMatch.label,
+              selectedLabelIdx: firstMatch.selectedLabelIdx
             });
           }
         });
@@ -431,6 +433,19 @@ class App extends React.Component {
     });
   };
 
+  sortTasksByLabel = () => {
+    let tasks = this.state.tasks;
+    tasks.sort(function(a, b) {
+      let textA = (a.label && a.label.toUpperCase()) || "Z",
+        textB = (b.label && b.label.toUpperCase()) || "Z";
+      return textA < textB ? -1 : textA > textB ? 1 : 0;
+    });
+
+    this.setState({
+      tasks: tasks
+    });
+  };
+
   render = () => {
     let listId = 0,
       {
@@ -452,7 +467,7 @@ class App extends React.Component {
         changeURLFn,
         changeURLTextFn,
         closeAllCtxMenus,
-        closeFn,
+        endTimeCloseFn,
         deadlineChangeFn,
         deleteTask,
         handleInputChange,
@@ -519,6 +534,7 @@ class App extends React.Component {
               {this.state.shouldShowColors ? (
                 <Dashboard tasks={this.state.tasks} />
               ) : null}
+              <Button onClick={this.sortTasksByLabel}>Sort by label</Button>
               <InputGroup className="mb-3">
                 <FormControl
                   onChange={handleInputChange}
@@ -542,7 +558,7 @@ class App extends React.Component {
                 ) : null}
                 {displayTaskCtxMenu ? (
                   <TaskContextMenu
-                    closeFn={closeFn}
+                    closeFn={endTimeCloseFn}
                     changeFn={deadlineChangeFn}
                     curDeadline={curDeadline}
                     tempPosition={tempPosition}
