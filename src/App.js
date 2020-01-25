@@ -34,6 +34,7 @@ class App extends React.Component {
       curTask: "",
       tempTask: "",
       displayAllContextMenus: false,
+      displaySortingOptionsMenu: false,
       displayTaskCtxMenu: false,
       displayLinkCtxMenu: false,
       displayLabelCtxMenu: false,
@@ -79,6 +80,20 @@ class App extends React.Component {
               displayLabelCtxMenu: true,
               currentLabel: curLabel
             });
+          }
+        }
+      ],
+      sortingOptions: [
+        {
+          text: "Sort By Label",
+          onClick: () => {
+            this.sortTasksByLabel();
+          }
+        },
+        {
+          text: "Sort By Deadline",
+          onClick: () => {
+            this.sortTasksByEndTime();
           }
         }
       ]
@@ -142,7 +157,8 @@ class App extends React.Component {
 
   closeAllCtxMenus = () => {
     this.setState({
-      displayAllContextMenus: false
+      displayAllContextMenus: false,
+      displaySortingOptionsMenu: false
     });
   };
 
@@ -177,7 +193,6 @@ class App extends React.Component {
   // Function to show the context menu
   showDeadlineContextMenu = ev => {
     this.setState({
-      //displayTaskCtxMenu: true,
       displayAllContextMenus: true,
       tempTask: ev.currentTarget.value,
       tempPosition: [ev.clientX, ev.clientY]
@@ -442,7 +457,8 @@ class App extends React.Component {
     });
 
     this.setState({
-      tasks: tasks
+      tasks: tasks,
+      displaySortingOptionsMenu: false
     });
   };
 
@@ -454,7 +470,7 @@ class App extends React.Component {
         a.removeEnd = true;
       }
       if (!b.end) {
-        b.end = Moment(new Date().subtract(10, "years"));
+        b.end = Moment(new Date()).subtract(10, "years");
         b.removeEnd = true;
       }
       return -1 * Moment(a.end).diff(Moment(b.end));
@@ -463,7 +479,15 @@ class App extends React.Component {
       if (t.removeEnd) t.end = undefined;
     });
     this.setState({
-      tasks: tasks
+      tasks: tasks,
+      displaySortingOptionsMenu: false
+    });
+  };
+
+  showSortingOptionsMenu = ev => {
+    this.setState({
+      displaySortingOptionsMenu: true,
+      tempPosition: [ev.clientX, ev.clientY]
     });
   };
 
@@ -475,6 +499,7 @@ class App extends React.Component {
         currentURLText,
         curTask,
         displayAllContextMenus,
+        displaySortingOptionsMenu,
         displayLinkCtxMenu,
         displayTaskCtxMenu,
         displayLabelCtxMenu,
@@ -498,7 +523,8 @@ class App extends React.Component {
         showDeadlineContextMenu,
         showColors,
         saveLabel,
-        cancelSaveLabel
+        cancelSaveLabel,
+        showSortingOptionsMenu
       } = this;
 
     let { loggedin, userName } = this.props;
@@ -515,7 +541,7 @@ class App extends React.Component {
 
     return (
       <>
-        {displayAllContextMenus ? (
+        {displayAllContextMenus || displaySortingOptionsMenu ? (
           <div className="curtain" onClick={closeAllCtxMenus}></div>
         ) : null}
         <div className="App">
@@ -538,6 +564,10 @@ class App extends React.Component {
                     value={shouldShowColors}
                   ></button>
                 </div>
+                <button
+                  onClick={showSortingOptionsMenu}
+                  className="menuLinkbutton"
+                ></button>
               </div>
               <TaskModal
                 show={this.state.showModal}
@@ -555,10 +585,6 @@ class App extends React.Component {
               {this.state.shouldShowColors ? (
                 <Dashboard tasks={this.state.tasks} />
               ) : null}
-              <Button onClick={this.sortTasksByLabel}>Sort by label</Button>
-              <Button onClick={this.sortTasksByEndTime}>
-                Sort by end time
-              </Button>
               <InputGroup className="mb-3">
                 <FormControl
                   onChange={handleInputChange}
@@ -578,6 +604,13 @@ class App extends React.Component {
                   <MenuItems
                     tempPosition={tempPosition}
                     menuOptionsList={menuOptionsList}
+                  ></MenuItems>
+                ) : null}
+
+                {displaySortingOptionsMenu ? (
+                  <MenuItems
+                    tempPosition={tempPosition}
+                    menuOptionsList={this.state.sortingOptions}
                   ></MenuItems>
                 ) : null}
                 {displayTaskCtxMenu ? (
