@@ -446,6 +446,27 @@ class App extends React.Component {
     });
   };
 
+  sortTasksByEndTime = () => {
+    let tasks = this.state.tasks;
+    tasks.sort(function(a, b) {
+      if (!a.end) {
+        a.end = Moment(new Date()).subtract(10, "years");
+        a.removeEnd = true;
+      }
+      if (!b.end) {
+        b.end = Moment(new Date().subtract(10, "years"));
+        b.removeEnd = true;
+      }
+      return -1 * Moment(a.end).diff(Moment(b.end));
+    });
+    tasks.forEach(t => {
+      if (t.removeEnd) t.end = undefined;
+    });
+    this.setState({
+      tasks: tasks
+    });
+  };
+
   render = () => {
     let listId = 0,
       {
@@ -535,6 +556,9 @@ class App extends React.Component {
                 <Dashboard tasks={this.state.tasks} />
               ) : null}
               <Button onClick={this.sortTasksByLabel}>Sort by label</Button>
+              <Button onClick={this.sortTasksByEndTime}>
+                Sort by end time
+              </Button>
               <InputGroup className="mb-3">
                 <FormControl
                   onChange={handleInputChange}
