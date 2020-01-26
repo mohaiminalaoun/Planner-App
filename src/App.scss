@@ -194,3 +194,24 @@
   opacity: 0.3;
   z-index: 2;
 }
+
+.listOfTasksContainer {
+  height: 60vh;
+  overflow-y: scroll;
+  border-top: 1px solid lightgrey;
+  border-radius: 12px;
+  border-bottom: 1px solid lightgrey;
+}
+
+.sortIcon {
+  margin-top: 0.5vh;
+  background: url(assets/sort.svg);
+  background-repeat: no-repeat;
+  float: right;
+  height: 15px;
+  border: none;
+  margin-right: 8px;
+  &:focus {
+    outline: 0;
+  }
+}

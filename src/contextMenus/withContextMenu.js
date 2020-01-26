@@ -3,10 +3,14 @@ import "./ContextMenu.scss";
 const withHOC = OriginalComponent => {
   class NewComponent extends React.Component {
     render() {
-      let divStyle = {
-        left: this.props.tempPosition[0] + "px",
-        top: this.props.tempPosition[1] + "px"
-      };
+      let { props } = this,
+        divStyle = {
+          left:
+            props.tempPosition[0] + 150 < window.screen.width
+              ? props.tempPosition[0] + "px"
+              : props.tempPosition[0] - 150 + "px",
+          top: props.tempPosition[1] + "px"
+        };
       return (
         <OriginalComponent
           {...this.props}

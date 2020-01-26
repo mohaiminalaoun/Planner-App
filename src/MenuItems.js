@@ -16,7 +16,10 @@ const MenuItems = props => {
       );
     }),
     divStyle = {
-      left: props.tempPosition[0] + "px",
+      left:
+        props.tempPosition[0] + 150 < window.screen.width
+          ? props.tempPosition[0] + "px"
+          : props.tempPosition[0] - 150 + "px",
       top: props.tempPosition[1] + "px"
     };
   return (

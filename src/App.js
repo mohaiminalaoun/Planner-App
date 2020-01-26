@@ -567,7 +567,7 @@ class App extends React.Component {
                 </div>
                 <button
                   onClick={showSortingOptionsMenu}
-                  className="menuLinkbutton"
+                  className="sortIcon"
                 ></button>
               </div>
               <TaskModal
@@ -600,7 +600,7 @@ class App extends React.Component {
                   </Button>
                 </InputGroup.Append>
               </InputGroup>
-              <ListGroup>
+              <ListGroup className="listOfTasksContainer">
                 {displayAllContextMenus ? (
                   <MenuItems
                     tempPosition={tempPosition}

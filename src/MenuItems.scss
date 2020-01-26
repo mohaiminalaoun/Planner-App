@@ -4,6 +4,7 @@
 }
 .menuOption {
   cursor: pointer;
+  white-space: nowrap;
 }
 .menuOption:hover {
   background-color: lightgrey;
