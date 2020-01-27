@@ -8,6 +8,7 @@ import TaskContextMenu from "./contextMenus/TaskContextMenu";
 import MenuItems from "./MenuItems";
 import LinkContextMenu from "./contextMenus/LinkContextMenu";
 import LabelContextMenu from "./contextMenus/LabelContextMenu";
+import DeleteContextMenu from "./contextMenus/DeleteContextMenu";
 import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
 import { connect } from "react-redux";
@@ -39,6 +40,8 @@ class App extends React.Component {
       displayTaskCtxMenu: false,
       displayLinkCtxMenu: false,
       displayLabelCtxMenu: false,
+      displayDeleteCtxMenu: false,
+      displayCurtain: false,
       currentURL: "",
       currentURLText: "",
       showModal: false,
@@ -54,7 +57,8 @@ class App extends React.Component {
           onClick: () => {
             this.setState({
               displayAllContextMenus: false,
-              displayTaskCtxMenu: true
+              displayTaskCtxMenu: true,
+              displayCurtain: false
             });
           }
         },
@@ -63,7 +67,8 @@ class App extends React.Component {
           onClick: () => {
             this.setState({
               displayAllContextMenus: false,
-              displayLinkCtxMenu: true
+              displayLinkCtxMenu: true,
+              displayCurtain: false
             });
           }
         },
@@ -79,7 +84,8 @@ class App extends React.Component {
             this.setState({
               displayAllContextMenus: false,
               displayLabelCtxMenu: true,
-              currentLabel: curLabel
+              currentLabel: curLabel,
+              displayCurtain: false
             });
           }
         }
@@ -124,7 +130,7 @@ class App extends React.Component {
       .then(() => {
         this.props.facebookLoginDispatch({
           loggedin: true,
-          userName: res.name //,
+          userName: res.name
         });
         this.setState({
           tasks: tasks,
@@ -159,7 +165,9 @@ class App extends React.Component {
   closeAllCtxMenus = () => {
     this.setState({
       displayAllContextMenus: false,
-      displaySortingOptionsMenu: false
+      displaySortingOptionsMenu: false,
+      displayCurtain: false,
+      displayDeleteCtxMenu: false
     });
   };
 
@@ -169,9 +177,9 @@ class App extends React.Component {
     });
   };
 
-  deleteTask = ev => {
+  deleteTask = tempTask => {
     let tasks = this.state.tasks,
-      curTask = ev.currentTarget.value,
+      curTask = tempTask,
       idx;
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].task === curTask) {
@@ -183,7 +191,8 @@ class App extends React.Component {
     tasks = tasks.slice(0, idx).concat(tasks.slice(idx + 1, tasks.length));
 
     this.setState({
-      tasks: tasks
+      tasks: tasks,
+      displayDeleteCtxMenu: false
     });
     db.tasks
       .where("task")
@@ -195,6 +204,7 @@ class App extends React.Component {
   showDeadlineContextMenu = ev => {
     this.setState({
       displayAllContextMenus: true,
+      displayCurtain: true,
       tempTask: ev.currentTarget.value,
       tempPosition: [ev.clientX, ev.clientY]
     });
@@ -254,28 +264,26 @@ class App extends React.Component {
   };
 
   saveLinkFn = () => {
-    let curURL = this.state.currentURL,
-      curURLText = this.state.currentURLText;
-    let tasks = this.state.tasks.concat();
-    let curTask = this.state.tempTask;
+    let { currentURL, currentURLText, tempTask } = this.state,
+      tasks = this.state.tasks.concat();
     for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].task === curTask) {
-        tasks[i].url = curURL;
-        tasks[i].urlText = curURLText;
+      if (tasks[i].task === tempTask) {
+        tasks[i].url = currentURL;
+        tasks[i].urlText = currentURLText;
         break;
       }
     }
     db.tasks
       .where("task")
-      .equalsIgnoreCase(curTask)
+      .equalsIgnoreCase(tempTask)
       .first(item => {
         let firstMatch = item;
         db.tasks.put({
           userName: this.props.userName,
-          task: curTask,
+          task: tempTask,
           endTime: firstMatch.endTime,
-          url: curURL,
-          urlText: curURLText,
+          url: currentURL,
+          urlText: currentURLText,
           id: firstMatch.id
         });
       });
@@ -308,7 +316,7 @@ class App extends React.Component {
   changeProgressState = param => {
     let progressState = param.currentTarget.value,
       curTask = param.currentTarget.getAttribute("task");
-    // TODO: makke this better
+    // TODO: make this better
     param.currentTarget.parentElement.parentElement.classList.remove("show");
 
     let tasks = this.state.tasks.concat();
@@ -459,7 +467,8 @@ class App extends React.Component {
 
     this.setState({
       tasks: tasks,
-      displaySortingOptionsMenu: false
+      displaySortingOptionsMenu: false,
+      displayCurtain: false
     });
   };
 
@@ -488,7 +497,24 @@ class App extends React.Component {
   showSortingOptionsMenu = ev => {
     this.setState({
       displaySortingOptionsMenu: true,
+      displayCurtain: true,
       tempPosition: [ev.clientX, ev.clientY]
+    });
+  };
+
+  showDeleteContextMenu = ev => {
+    this.setState({
+      displayDeleteCtxMenu: true,
+      displayCurtain: true,
+      tempTask: ev.currentTarget.value,
+      tempPosition: [ev.clientX, ev.clientY]
+    });
+  };
+
+  cancelDelete = () => {
+    this.setState({
+      displayDeleteCtxMenu: false,
+      displayCurtain: false
     });
   };
 
@@ -504,6 +530,7 @@ class App extends React.Component {
         displayLinkCtxMenu,
         displayTaskCtxMenu,
         displayLabelCtxMenu,
+        displayDeleteCtxMenu,
         menuOptionsList,
         tempPosition,
         shouldShowColors
@@ -542,7 +569,8 @@ class App extends React.Component {
 
     return (
       <>
-        {displayAllContextMenus || displaySortingOptionsMenu ? (
+        {this.state.displayCurtain ? (
+          /*displayAllContextMenus || displaySortingOptionsMenu ? */
           <div className="curtain" onClick={closeAllCtxMenus}></div>
         ) : null}
         <div className="App">
@@ -647,6 +675,14 @@ class App extends React.Component {
                     currentLabelChangeByClick={this.currentLabelChangeByClick}
                   />
                 ) : null}
+                {displayDeleteCtxMenu ? (
+                  <DeleteContextMenu
+                    tempPosition={tempPosition}
+                    tempTask={this.state.tempTask}
+                    deleteTask={deleteTask}
+                    cancelDelete={this.cancelDelete}
+                  />
+                ) : null}
                 {this.state &&
                   this.state.tasks.map(task => {
                     return (
@@ -667,7 +703,8 @@ class App extends React.Component {
                           {task.end ? Moment(task.end).format("LLLL") : null}
                         </div>
                         <button
-                          onClick={deleteTask}
+                          //  {/*onClick={deleteTask} */}
+                          onClick={this.showDeleteContextMenu}
                           value={task.task}
                           className="menuItembutton"
                         />

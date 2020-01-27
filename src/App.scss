@@ -157,6 +157,9 @@
 
 .task-title {
   cursor: pointer;
+  display: inline-block;
+  max-height: 50px;
+  text-overflow: ellipsis;
 }
 
 .progress {
@@ -196,11 +199,11 @@
 }
 
 .listOfTasksContainer {
-  height: 60vh;
+  max-height: 60vh;
   overflow-y: scroll;
   border-top: 1px solid lightgrey;
-  border-radius: 12px;
   border-bottom: 1px solid lightgrey;
+  border-top: 8px;
 }
 
 .sortIcon {
