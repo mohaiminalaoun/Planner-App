@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/Planner-app/static/css/main.3d2f606a.chunk.css",
-    "main.js": "/Planner-app/static/js/main.fa35dfab.chunk.js",
-    "main.js.map": "/Planner-app/static/js/main.fa35dfab.chunk.js.map",
-    "runtime-main.js": "/Planner-app/static/js/runtime-main.5661c5a1.js",
-    "runtime-main.js.map": "/Planner-app/static/js/runtime-main.5661c5a1.js.map",
-    "static/css/2.e0f36c20.chunk.css": "/Planner-app/static/css/2.e0f36c20.chunk.css",
-    "static/js/2.716de4db.chunk.js": "/Planner-app/static/js/2.716de4db.chunk.js",
-    "static/js/2.716de4db.chunk.js.map": "/Planner-app/static/js/2.716de4db.chunk.js.map",
-    "index.html": "/Planner-app/index.html",
-    "precache-manifest.b016056fd5db91c4b1218df1d3fcb19d.js": "/Planner-app/precache-manifest.b016056fd5db91c4b1218df1d3fcb19d.js",
-    "service-worker.js": "/Planner-app/service-worker.js",
-    "static/css/2.e0f36c20.chunk.css.map": "/Planner-app/static/css/2.e0f36c20.chunk.css.map",
-    "static/css/main.3d2f606a.chunk.css.map": "/Planner-app/static/css/main.3d2f606a.chunk.css.map",
-    "static/js/2.716de4db.chunk.js.LICENSE": "/Planner-app/static/js/2.716de4db.chunk.js.LICENSE",
-    "static/media/App.scss": "/Planner-app/static/media/trash.a36421a8.svg"
+    "main.css": "/Planner-App/static/css/main.5527466f.chunk.css",
+    "main.js": "/Planner-App/static/js/main.66202960.chunk.js",
+    "main.js.map": "/Planner-App/static/js/main.66202960.chunk.js.map",
+    "runtime-main.js": "/Planner-App/static/js/runtime-main.8657a95f.js",
+    "runtime-main.js.map": "/Planner-App/static/js/runtime-main.8657a95f.js.map",
+    "static/css/2.e0f36c20.chunk.css": "/Planner-App/static/css/2.e0f36c20.chunk.css",
+    "static/js/2.716de4db.chunk.js": "/Planner-App/static/js/2.716de4db.chunk.js",
+    "static/js/2.716de4db.chunk.js.map": "/Planner-App/static/js/2.716de4db.chunk.js.map",
+    "index.html": "/Planner-App/index.html",
+    "precache-manifest.65b9623e1a2e63c24360f9914bb8b316.js": "/Planner-App/precache-manifest.65b9623e1a2e63c24360f9914bb8b316.js",
+    "service-worker.js": "/Planner-App/service-worker.js",
+    "static/css/2.e0f36c20.chunk.css.map": "/Planner-App/static/css/2.e0f36c20.chunk.css.map",
+    "static/css/main.5527466f.chunk.css.map": "/Planner-App/static/css/main.5527466f.chunk.css.map",
+    "static/js/2.716de4db.chunk.js.LICENSE": "/Planner-App/static/js/2.716de4db.chunk.js.LICENSE",
+    "static/media/App.scss": "/Planner-App/static/media/trash.a36421a8.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.5661c5a1.js",
+    "static/js/runtime-main.8657a95f.js",
     "static/css/2.e0f36c20.chunk.css",
     "static/js/2.716de4db.chunk.js",
-    "static/css/main.3d2f606a.chunk.css",
-    "static/js/main.fa35dfab.chunk.js"
+    "static/css/main.5527466f.chunk.css",
+    "static/js/main.66202960.chunk.js"
   ]
 }
