@@ -1,13 +1,11 @@
 import React from "react";
 import Moment from "moment";
 import "./App.scss";
+import "react-toggle/style.css"; // for ES6 modules
+import Toggle from "react-toggle";
+
 import FacebookLogin from "react-facebook-login";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TaskContextMenu from "./contextMenus/TaskContextMenu";
-import MenuItems from "./MenuItems";
-import LinkContextMenu from "./contextMenus/LinkContextMenu";
-import LabelContextMenu from "./contextMenus/LabelContextMenu";
-import DeleteContextMenu from "./contextMenus/DeleteContextMenu";
 import ContextMenuContainer from "./contextMenus/ContextMenuContainer";
 import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
@@ -202,7 +200,8 @@ class App extends React.Component {
 
     this.setState({
       tasks: tasks,
-      displayDeleteCtxMenu: false
+      displayDeleteCtxMenu: false,
+      displayCurtain: false
     });
     db.tasks
       .where("task")
@@ -593,11 +592,13 @@ class App extends React.Component {
                   <span className="userName">{userName}</span>
                 </div>
                 <div className="toggle-container">
-                  <button
-                    onClick={showColors}
-                    className={`smallMenuButton ${shouldShowColors}`}
-                    value={shouldShowColors}
-                  ></button>
+                  <label>
+                    <Toggle
+                      defaultChecked={false}
+                      onChange={showColors}
+                      value={shouldShowColors}
+                    />
+                  </label>
                 </div>
                 <button
                   onClick={showSortingOptionsMenu}
@@ -640,19 +641,22 @@ class App extends React.Component {
                   cancelSaveLabel={cancelSaveLabel}
                   changeFn={deadlineChangeFn}
                   changeURLFn={changeURLFn}
-                  closeFn={displayLinkCtxMenu ? linkCloseFn : endTimeCloseFn}
+                  closeFn={linkCloseFn}
                   curDeadline={curDeadline}
                   currentLabel={this.state.currentLabel}
                   currentLabelChange={this.currentLabelChange}
                   currentLabelChangeByClick={this.currentLabelChangeByClick}
                   currentURL={currentURL}
                   currentURLText={currentURLText}
-                  currentURLTextFn={changeURLTextFn}
+                  changeURLTextFn={changeURLTextFn}
                   deleteTask={deleteTask}
                   displayAllContextMenus={displayAllContextMenus}
                   displayDeleteCtxMenu={this.state.displayDeleteCtxMenu}
                   displayLabelCtxMenu={this.state.displayLabelCtxMenu}
                   displaySortingOptionsMenu={displaySortingOptionsMenu}
+                  displayTaskCtxMenu={displayTaskCtxMenu}
+                  displayLinkCtxMenu={displayLinkCtxMenu}
+                  endTimeCloseFn={endTimeCloseFn}
                   labels={this.state.labels}
                   menuOptionsList={
                     displayAllContextMenus
@@ -691,7 +695,7 @@ class App extends React.Component {
                           className="menuItembutton"
                         />
                         <div className="list-link">
-                          <a href={`https://${task.url}`} target="_blank">
+                          <a href={"https://" + task.url} target="_blank">
                             {task.urlText}
                           </a>
                         </div>

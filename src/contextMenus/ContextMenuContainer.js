@@ -1,9 +1,10 @@
 import React from "react";
-import TaskContextMenu from "./TaskContextMenu";
+
 import MenuItems from "../MenuItems";
 import LinkContextMenu from "./LinkContextMenu";
 import LabelContextMenu from "./LabelContextMenu";
 import DeleteContextMenu from "./DeleteContextMenu";
+import TaskContextMenu from "./TaskContextMenu";
 
 class ContextMenuContainer extends React.Component {
   constructor(props) {
@@ -17,13 +18,13 @@ class ContextMenuContainer extends React.Component {
       displaySortingOptionsMenu,
       displayTaskCtxMenu,
       endTimeCloseFn,
-      deadlineChangeFn,
+      changeFn,
       curDeadline,
       displayDeleteCtxMenu,
       displayLinkCtxMenu,
       displayLabelCtxMenu,
       linkCloseFn,
-      saveLinkFn,
+      saveFn,
       currentURL,
       currentURLText,
       changeURLTextFn,
@@ -57,7 +58,7 @@ class ContextMenuContainer extends React.Component {
         {displayTaskCtxMenu ? (
           <TaskContextMenu
             closeFn={endTimeCloseFn}
-            changeFn={deadlineChangeFn}
+            changeFn={changeFn}
             curDeadline={curDeadline}
             tempPosition={tempPosition}
           ></TaskContextMenu>
@@ -66,7 +67,7 @@ class ContextMenuContainer extends React.Component {
           <LinkContextMenu
             tempPosition={tempPosition}
             closeFn={linkCloseFn}
-            saveFn={saveLinkFn}
+            saveFn={saveFn}
             currentURL={currentURL}
             currentURLText={currentURLText}
             changeURLTextFn={changeURLTextFn}
