@@ -2,13 +2,13 @@ import React from "react";
 import Moment from "moment";
 import "./App.scss";
 import FacebookLogin from "react-facebook-login";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import TaskContextMenu from "./contextMenus/TaskContextMenu";
 import MenuItems from "./MenuItems";
 import LinkContextMenu from "./contextMenus/LinkContextMenu";
 import LabelContextMenu from "./contextMenus/LabelContextMenu";
 import DeleteContextMenu from "./contextMenus/DeleteContextMenu";
+import ContextMenuContainer from "./contextMenus/ContextMenuContainer";
 import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
 import { connect } from "react-redux";
@@ -106,6 +106,15 @@ class App extends React.Component {
       ]
     };
   }
+
+  componentDidMount = () => {
+    if (window.localStorage.getItem("todousername") !== null) {
+      this.responseFacebook({
+        name: window.localStorage.getItem("todousername")
+      });
+    }
+  };
+
   responseFacebook = res => {
     let tasks = [],
       labels = new Set(); // we're going to use a Set to store the labels
@@ -147,6 +156,7 @@ class App extends React.Component {
       userName: "User"
     });
   };
+
   addToList = ev => {
     if (this.state.curTask.trim().length >= 1) {
       let curTask = this.state.curTask;
@@ -312,6 +322,7 @@ class App extends React.Component {
       currentURL: ev.target.value
     });
   };
+
   // Function to save the state change of the task
   changeProgressState = param => {
     let progressState = param.currentTarget.value,
@@ -385,14 +396,6 @@ class App extends React.Component {
     });
   };
 
-  componentDidMount = () => {
-    if (window.localStorage.getItem("todousername") !== null) {
-      this.responseFacebook({
-        name: window.localStorage.getItem("todousername")
-      });
-    }
-  };
-
   saveLabel = () => {
     let curLabel = this.state.currentLabel,
       curTask = this.state.tempTask,
@@ -451,6 +454,7 @@ class App extends React.Component {
       selectedLabelIdx: v
     });
   };
+
   currentLabelChangeByClick = v => {
     this.setState({
       currentLabel: v
@@ -490,7 +494,8 @@ class App extends React.Component {
     });
     this.setState({
       tasks: tasks,
-      displaySortingOptionsMenu: false
+      displaySortingOptionsMenu: false,
+      displayCurtain: false
     });
   };
 
@@ -570,7 +575,6 @@ class App extends React.Component {
     return (
       <>
         {this.state.displayCurtain ? (
-          /*displayAllContextMenus || displaySortingOptionsMenu ? */
           <div className="curtain" onClick={closeAllCtxMenus}></div>
         ) : null}
         <div className="App">
@@ -584,8 +588,10 @@ class App extends React.Component {
                 {"Log out"}
               </Button>
               <div className="nameHeader">
-                {"Welcome "}
-                <span className="userName">{userName}</span>
+                <div className="welcomeBar">
+                  {"Welcome "}
+                  <span className="userName">{userName}</span>
+                </div>
                 <div className="toggle-container">
                   <button
                     onClick={showColors}
@@ -629,60 +635,37 @@ class App extends React.Component {
                 </InputGroup.Append>
               </InputGroup>
               <ListGroup className="listOfTasksContainer">
-                {displayAllContextMenus ? (
-                  <MenuItems
-                    tempPosition={tempPosition}
-                    menuOptionsList={menuOptionsList}
-                  ></MenuItems>
-                ) : null}
-
-                {displaySortingOptionsMenu ? (
-                  <MenuItems
-                    tempPosition={tempPosition}
-                    menuOptionsList={this.state.sortingOptions}
-                  ></MenuItems>
-                ) : null}
-                {displayTaskCtxMenu ? (
-                  <TaskContextMenu
-                    closeFn={endTimeCloseFn}
-                    changeFn={deadlineChangeFn}
-                    curDeadline={curDeadline}
-                    tempPosition={tempPosition}
-                  ></TaskContextMenu>
-                ) : null}
-                {displayLinkCtxMenu ? (
-                  <LinkContextMenu
-                    tempPosition={tempPosition}
-                    closeFn={linkCloseFn}
-                    saveFn={saveLinkFn}
-                    currentURL={currentURL}
-                    currentURLText={currentURLText}
-                    changeURLTextFn={changeURLTextFn}
-                    changeURLFn={changeURLFn}
-                  ></LinkContextMenu>
-                ) : null}
-                {displayLabelCtxMenu ? (
-                  <LabelContextMenu
-                    tempPosition={tempPosition}
-                    saveLabel={saveLabel}
-                    currentLabel={this.state.currentLabel}
-                    cancelSaveLabel={cancelSaveLabel}
-                    tempTask={this.state.tempTask}
-                    currentLabelChange={this.currentLabelChange}
-                    selectedLabelIdx={this.state.selectedLabelIdx}
-                    selectedLabelIdxChange={this.selectedLabelIdxChange}
-                    labels={this.state.labels}
-                    currentLabelChangeByClick={this.currentLabelChangeByClick}
-                  />
-                ) : null}
-                {displayDeleteCtxMenu ? (
-                  <DeleteContextMenu
-                    tempPosition={tempPosition}
-                    tempTask={this.state.tempTask}
-                    deleteTask={deleteTask}
-                    cancelDelete={this.cancelDelete}
-                  />
-                ) : null}
+                <ContextMenuContainer
+                  cancelDelete={this.cancelDelete}
+                  cancelSaveLabel={cancelSaveLabel}
+                  changeFn={deadlineChangeFn}
+                  changeURLFn={changeURLFn}
+                  closeFn={displayLinkCtxMenu ? linkCloseFn : endTimeCloseFn}
+                  curDeadline={curDeadline}
+                  currentLabel={this.state.currentLabel}
+                  currentLabelChange={this.currentLabelChange}
+                  currentLabelChangeByClick={this.currentLabelChangeByClick}
+                  currentURL={currentURL}
+                  currentURLText={currentURLText}
+                  currentURLTextFn={changeURLTextFn}
+                  deleteTask={deleteTask}
+                  displayAllContextMenus={displayAllContextMenus}
+                  displayDeleteCtxMenu={this.state.displayDeleteCtxMenu}
+                  displayLabelCtxMenu={this.state.displayLabelCtxMenu}
+                  displaySortingOptionsMenu={displaySortingOptionsMenu}
+                  labels={this.state.labels}
+                  menuOptionsList={
+                    displayAllContextMenus
+                      ? menuOptionsList
+                      : this.state.sortingOptions
+                  }
+                  saveFn={saveLinkFn}
+                  saveLabel={saveLabel}
+                  selectedLabelIdx={this.state.selectedLabelIdx}
+                  selectedLabelIdxChange={this.selectedLabelIdxChange}
+                  tempPosition={tempPosition}
+                  tempTask={this.state.tempTask}
+                />
                 {this.state &&
                   this.state.tasks.map(task => {
                     return (
@@ -703,13 +686,12 @@ class App extends React.Component {
                           {task.end ? Moment(task.end).format("LLLL") : null}
                         </div>
                         <button
-                          //  {/*onClick={deleteTask} */}
                           onClick={this.showDeleteContextMenu}
                           value={task.task}
                           className="menuItembutton"
                         />
                         <div className="list-link">
-                          <a href={"https://" + task.url} target="_blank">
+                          <a href={`https://${task.url}`} target="_blank">
                             {task.urlText}
                           </a>
                         </div>
