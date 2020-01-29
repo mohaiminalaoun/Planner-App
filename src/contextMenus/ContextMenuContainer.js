@@ -4,7 +4,7 @@ import MenuItems from "../MenuItems";
 import LinkContextMenu from "./LinkContextMenu";
 import LabelContextMenu from "./LabelContextMenu";
 import DeleteContextMenu from "./DeleteContextMenu";
-import TaskContextMenu from "./TaskContextMenu";
+import DeadlineContextMenu from "./DeadlineContextMenu";
 
 class ContextMenuContainer extends React.Component {
   constructor(props) {
@@ -56,12 +56,12 @@ class ContextMenuContainer extends React.Component {
           ></MenuItems>
         ) : null}
         {displayTaskCtxMenu ? (
-          <TaskContextMenu
+          <DeadlineContextMenu
             closeFn={endTimeCloseFn}
             changeFn={changeFn}
             curDeadline={curDeadline}
             tempPosition={tempPosition}
-          ></TaskContextMenu>
+          ></DeadlineContextMenu>
         ) : null}
         {displayLinkCtxMenu ? (
           <LinkContextMenu

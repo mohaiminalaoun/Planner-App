@@ -4,13 +4,21 @@ const withHOC = OriginalComponent => {
   class NewComponent extends React.Component {
     render() {
       let { props } = this,
-        divStyle = {
-          left:
-            props.tempPosition[0] + 150 < window.screen.width
-              ? props.tempPosition[0] + "px"
-              : props.tempPosition[0] - 150 + "px",
-          top: props.tempPosition[1] + "px"
-        };
+        divStyle =
+          props.tempPosition[0] + 300 < window.screen.width
+            ? {
+                left: props.tempPosition[0] + "px",
+                top: props.tempPosition[1] + "px"
+              }
+            : {
+                left: "0",
+                right: "0",
+                top: "40%",
+                marginLeft: "auto",
+                marginRight: "auto"
+              };
+      console.log(window.screen.width);
+      console.log(props.tempPosition);
       return (
         <OriginalComponent
           {...this.props}

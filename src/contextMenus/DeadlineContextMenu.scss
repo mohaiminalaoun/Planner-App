@@ -1,8 +1,17 @@
 .taskContextMenu {
   position: absolute;
   z-index: 3;
-  width: 150px;
+  width: 250px;
   border: 1px solid;
   padding: 10px;
   background-color: ghostwhite;
+}
+
+.deadline-ok-btn {
+  width: 50% !important;
+}
+
+.deadline-close-btn {
+  width: 50%;
+  margin-right: 2px;
 }

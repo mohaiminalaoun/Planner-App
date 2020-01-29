@@ -171,6 +171,7 @@ class App extends React.Component {
   };
 
   closeAllCtxMenus = () => {
+    console.log("clicked close all context menus fn");
     this.setState({
       displayAllContextMenus: false,
       displaySortingOptionsMenu: false,
@@ -213,7 +214,7 @@ class App extends React.Component {
   showDeadlineContextMenu = ev => {
     this.setState({
       displayAllContextMenus: true,
-      displayCurtain: true,
+      displayCurtain: window.screen.width < 500 ? false : true, // hack for mobile TODO: fix later
       tempTask: ev.currentTarget.value,
       tempPosition: [ev.clientX, ev.clientY]
     });
@@ -635,41 +636,42 @@ class App extends React.Component {
                   </Button>
                 </InputGroup.Append>
               </InputGroup>
+              <ContextMenuContainer
+                cancelDelete={this.cancelDelete}
+                cancelSaveLabel={cancelSaveLabel}
+                changeFn={deadlineChangeFn}
+                changeURLFn={changeURLFn}
+                closeFn={linkCloseFn}
+                curDeadline={curDeadline}
+                currentLabel={this.state.currentLabel}
+                currentLabelChange={this.currentLabelChange}
+                currentLabelChangeByClick={this.currentLabelChangeByClick}
+                currentURL={currentURL}
+                currentURLText={currentURLText}
+                changeURLTextFn={changeURLTextFn}
+                deleteTask={deleteTask}
+                displayAllContextMenus={displayAllContextMenus}
+                displayDeleteCtxMenu={this.state.displayDeleteCtxMenu}
+                displayLabelCtxMenu={this.state.displayLabelCtxMenu}
+                displaySortingOptionsMenu={displaySortingOptionsMenu}
+                displayTaskCtxMenu={displayTaskCtxMenu}
+                displayLinkCtxMenu={displayLinkCtxMenu}
+                endTimeCloseFn={endTimeCloseFn}
+                labels={this.state.labels}
+                linkCloseFn={linkCloseFn}
+                menuOptionsList={
+                  displayAllContextMenus
+                    ? menuOptionsList
+                    : this.state.sortingOptions
+                }
+                saveFn={saveLinkFn}
+                saveLabel={saveLabel}
+                selectedLabelIdx={this.state.selectedLabelIdx}
+                selectedLabelIdxChange={this.selectedLabelIdxChange}
+                tempPosition={tempPosition}
+                tempTask={this.state.tempTask}
+              />
               <ListGroup className="listOfTasksContainer">
-                <ContextMenuContainer
-                  cancelDelete={this.cancelDelete}
-                  cancelSaveLabel={cancelSaveLabel}
-                  changeFn={deadlineChangeFn}
-                  changeURLFn={changeURLFn}
-                  closeFn={linkCloseFn}
-                  curDeadline={curDeadline}
-                  currentLabel={this.state.currentLabel}
-                  currentLabelChange={this.currentLabelChange}
-                  currentLabelChangeByClick={this.currentLabelChangeByClick}
-                  currentURL={currentURL}
-                  currentURLText={currentURLText}
-                  changeURLTextFn={changeURLTextFn}
-                  deleteTask={deleteTask}
-                  displayAllContextMenus={displayAllContextMenus}
-                  displayDeleteCtxMenu={this.state.displayDeleteCtxMenu}
-                  displayLabelCtxMenu={this.state.displayLabelCtxMenu}
-                  displaySortingOptionsMenu={displaySortingOptionsMenu}
-                  displayTaskCtxMenu={displayTaskCtxMenu}
-                  displayLinkCtxMenu={displayLinkCtxMenu}
-                  endTimeCloseFn={endTimeCloseFn}
-                  labels={this.state.labels}
-                  menuOptionsList={
-                    displayAllContextMenus
-                      ? menuOptionsList
-                      : this.state.sortingOptions
-                  }
-                  saveFn={saveLinkFn}
-                  saveLabel={saveLabel}
-                  selectedLabelIdx={this.state.selectedLabelIdx}
-                  selectedLabelIdxChange={this.selectedLabelIdxChange}
-                  tempPosition={tempPosition}
-                  tempTask={this.state.tempTask}
-                />
                 {this.state &&
                   this.state.tasks.map(task => {
                     return (
