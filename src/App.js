@@ -181,9 +181,12 @@ class App extends React.Component {
   };
 
   handleInputChange = ev => {
-    this.setState({
-      curTask: ev.target.value
-    });
+    let val = ev.target.value;
+    if (val.length < 50) {
+      this.setState({
+        curTask: ev.target.value
+      });
+    }
   };
 
   deleteTask = tempTask => {
@@ -510,7 +513,7 @@ class App extends React.Component {
   showDeleteContextMenu = ev => {
     this.setState({
       displayDeleteCtxMenu: true,
-      displayCurtain: true,
+      displayCurtain: window.screen.width > 500 ? true : false,
       tempTask: ev.currentTarget.value,
       tempPosition: [ev.clientX, ev.clientY]
     });

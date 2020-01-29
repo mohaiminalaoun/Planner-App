@@ -23,12 +23,15 @@
 }
 
 .menuItembutton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   margin-top: 0.5vh;
   background-color: indianred;
   background: url(assets/trash.svg);
   border: none;
   background-repeat: no-repeat;
-  float: right;
+  //float: right;
   height: 15px;
   border-radius: 15px;
   outline: 0;
@@ -37,6 +40,9 @@
   }
 }
 .menuLinkbutton {
+  position: absolute;
+  top: 30px;
+  right: 10px;
   margin-top: 0.5vh;
   background-color: green;
   background: url(assets/menu.svg);
@@ -88,12 +94,10 @@
 }
 
 .endTime {
-  margin-left: 10px;
   display: inline-flex;
   height: 10px;
   font-size: 9px;
-  font-weight: lighter;
-  margin-top: -4px;
+  font-weight: 300;
 }
 
 .list-link {
@@ -156,7 +160,12 @@
   cursor: pointer;
   display: inline-block;
   max-height: 50px;
-  text-overflow: ellipsis;
+  max-width: 320px;
+  white-space: nowrap;
+  text-overflow: hidden;
+  overflow: hidden;
+  margin-right: 10px;
+  margin-bottom: -5px;
 }
 
 .progress {

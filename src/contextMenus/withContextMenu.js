@@ -17,8 +17,6 @@ const withHOC = OriginalComponent => {
                 marginLeft: "auto",
                 marginRight: "auto"
               };
-      console.log(window.screen.width);
-      console.log(props.tempPosition);
       return (
         <OriginalComponent
           {...this.props}

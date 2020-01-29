@@ -46,7 +46,9 @@ class TaskModal extends React.Component {
     return (
       <Modal show={props.show} onHide={props.onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title>{props.currentModalTask}</Modal.Title>
+          <Modal.Title className="task-modal-title">
+            {props.currentModalTask}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group controlId="exampleForm.ControlTextarea1">

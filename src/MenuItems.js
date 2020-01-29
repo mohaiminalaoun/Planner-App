@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 import { Button, ListGroup } from "react-bootstrap";
 
 const MenuItems = props => {
-  console.log(window.screen.width);
-  console.log(props.tempPosition);
   const options = props.menuOptionsList.map(item => {
       return (
         <ListGroup.Item
