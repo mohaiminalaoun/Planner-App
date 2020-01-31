@@ -206,6 +206,7 @@
 
 .listOfTasksContainer {
   max-height: 60vh;
+  margin: 10px;
   overflow-y: scroll;
 }
 
@@ -228,7 +229,7 @@
   overflow: hidden;
 }
 @media screen and (max-width: 500px) {
-  .App {
-    transform: scale(0.9);
-  }
+  // .checklist-container {
+  //   transform: scale(0.9);
+  // }
 }

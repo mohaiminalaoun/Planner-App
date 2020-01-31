@@ -3,6 +3,16 @@ import "./ContextMenu.scss";
 const withHOC = OriginalComponent => {
   class NewComponent extends React.Component {
     render() {
+      let isMobile = window.matchMedia("only screen and (max-width: 760px)")
+        .matches;
+
+      if (isMobile) {
+        //Conditional script here
+        console.log("isMobile true");
+      } else {
+        console.log("is mobile false");
+      }
+
       let { props } = this,
         divStyle =
           props.tempPosition[0] + 300 < window.screen.width

@@ -111,6 +111,14 @@ class App extends React.Component {
         name: window.localStorage.getItem("todousername")
       });
     }
+    // async function getStocks() {
+    //   let url =
+    //     "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=MSFT&interval=30min&apikey=1HZKQ8BEPBGQMTV0";
+    //   let res = await fetch(url);
+    //   let text = await res.text();
+    //   console.log(text);
+    // }
+    // getStocks();
   };
 
   responseFacebook = res => {
@@ -139,6 +147,17 @@ class App extends React.Component {
           loggedin: true,
           userName: res.name
         });
+        if (tasks.length === 0) {
+          tasks.push({
+            task: "Add a task like this!",
+            end: new Date(),
+            url: "www.google.com",
+            urlText: "Add a link like this",
+            progressState: "progress",
+            label: "Label",
+            selectedLabelIdx: 1
+          });
+        }
         this.setState({
           tasks: tasks,
           labels: labels
@@ -223,17 +242,22 @@ class App extends React.Component {
     });
   };
 
+  deadlineChangeFn = time => {
+    this.setState({
+      curDeadline: time
+    });
+  };
+
   endTimeCloseFn = () => {
     let tasks = this.state.tasks.concat();
     let curTask = this.state.tempTask;
     this.setState({
       displayTaskCtxMenu: false
     });
-    let end = parseInt(this.state.curDeadline);
-    if (Number.isInteger(end)) {
+    if (this.state.curDeadline) {
       for (let i = 0; i < tasks.length; i++) {
         if (tasks[i].task === curTask) {
-          tasks[i].end = Moment(new Date()).add(end, "hour")._d;
+          tasks[i].end = this.state.curDeadline;
           break;
         }
       }
@@ -246,19 +270,19 @@ class App extends React.Component {
         .where("task")
         .equalsIgnoreCase(curTask)
         .first(item => {
-          if (Number.isInteger(end)) {
-            firstMatch = item;
-            let endTime = Moment().add(end, "hour");
-            db.tasks.put({
-              userName: this.props.userName,
-              task: curTask,
-              richText: firstMatch.richText,
-              endTime: endTime._d,
-              id: firstMatch.id,
-              label: firstMatch.label,
-              selectedLabelIdx: firstMatch.selectedLabelIdx
-            });
-          }
+          //if (Number.isInteger(end)) {
+          firstMatch = item;
+          //let endTime = Moment().add(end, "hour");
+          db.tasks.put({
+            userName: this.props.userName,
+            task: curTask,
+            richText: firstMatch.richText,
+            endTime: this.state.curDeadline,
+            id: firstMatch.id,
+            label: firstMatch.label,
+            selectedLabelIdx: firstMatch.selectedLabelIdx
+          });
+          //  }
         });
     }
     this.setState({
@@ -308,12 +332,6 @@ class App extends React.Component {
     });
   };
 
-  deadlineChangeFn = ev => {
-    this.setState({
-      curDeadline: ev.target.value
-    });
-  };
-
   changeURLTextFn = ev => {
     this.setState({
       currentURLText: ev.target.value
@@ -344,16 +362,18 @@ class App extends React.Component {
       .where("task")
       .equalsIgnoreCase(curTask)
       .first(item => {
-        let firstMatch = item;
-        db.tasks.put({
-          userName: this.props.userName,
-          task: curTask,
-          endTime: firstMatch.endTime,
-          url: firstMatch.url,
-          urlText: firstMatch.urlText,
-          progressState: progressState,
-          id: firstMatch.id
-        });
+        if (item) {
+          let firstMatch = item;
+          db.tasks.put({
+            userName: this.props.userName,
+            task: curTask,
+            endTime: firstMatch.endTime,
+            url: firstMatch.url,
+            urlText: firstMatch.urlText,
+            progressState: progressState,
+            id: firstMatch.id
+          });
+        }
       });
     this.setState({
       displayLinkCtxMenu: false,
@@ -378,9 +398,13 @@ class App extends React.Component {
       .first(item => {
         this.setState({
           showModal: true,
-          currentModalTask: item.task,
-          currentModalTaskEnd: item.endTime,
-          currentRichText: item.richText
+          currentModalTask: item
+            ? item.task
+            : "You'll see your task header here",
+          currentModalTaskEnd: item ? item.endTime : "Jan 24 2020 8:45pm EST",
+          currentRichText: item
+            ? item.richText
+            : "Here you can have a details section too! ^_^"
         });
       });
   };
@@ -505,7 +529,7 @@ class App extends React.Component {
   showSortingOptionsMenu = ev => {
     this.setState({
       displaySortingOptionsMenu: true,
-      displayCurtain: true,
+      displayCurtain: window.screen.width > 500 ? true : false,
       tempPosition: [ev.clientX, ev.clientY]
     });
   };
