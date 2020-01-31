@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "edb54f37de569878133bed84bf95b281",
+    "revision": "27c8c982cc332603c971ae506bd3d677",
     "url": "/Planner-App/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Planner-App/static/css/2.f1282a06.chunk.css"
   },
   {
-    "revision": "242d4c1a4e92d26f688a",
+    "revision": "71c011ae4f834f5d77b8",
     "url": "/Planner-App/static/css/main.bbfe98bc.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Planner-App/static/js/2.9b694785.chunk.js.LICENSE"
   },
   {
-    "revision": "242d4c1a4e92d26f688a",
-    "url": "/Planner-App/static/js/main.f88aac5d.chunk.js"
+    "revision": "71c011ae4f834f5d77b8",
+    "url": "/Planner-App/static/js/main.c6cfad0f.chunk.js"
   },
   {
     "revision": "5e0a83e530b5037c2153",
