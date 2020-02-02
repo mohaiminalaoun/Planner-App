@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "27c8c982cc332603c971ae506bd3d677",
+    "revision": "8edf92cefaf6ba17209ae5a7b5154c2b",
     "url": "/Planner-App/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Planner-App/static/css/2.f1282a06.chunk.css"
   },
   {
-    "revision": "71c011ae4f834f5d77b8",
-    "url": "/Planner-App/static/css/main.bbfe98bc.chunk.css"
+    "revision": "2e14846c447a5008a047",
+    "url": "/Planner-App/static/css/main.616f96df.chunk.css"
   },
   {
     "revision": "8e87cbc9b0e4295e8082",
@@ -20,12 +20,32 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Planner-App/static/js/2.9b694785.chunk.js.LICENSE"
   },
   {
-    "revision": "71c011ae4f834f5d77b8",
-    "url": "/Planner-App/static/js/main.c6cfad0f.chunk.js"
+    "revision": "2e14846c447a5008a047",
+    "url": "/Planner-App/static/js/main.2ee5b764.chunk.js"
   },
   {
     "revision": "5e0a83e530b5037c2153",
     "url": "/Planner-App/static/js/runtime-main.8657a95f.js"
+  },
+  {
+    "revision": "5673da52c98bb6cb33ada5aaf649703e",
+    "url": "/Planner-App/static/media/Roboto-Regular.5673da52.ttf"
+  },
+  {
+    "revision": "230fccca39f830c45b80f2d3b1f33697",
+    "url": "/Planner-App/static/media/Serenity.230fccca.otf"
+  },
+  {
+    "revision": "03e667c49644d1112fb00fc2fb02339d",
+    "url": "/Planner-App/static/media/Starlight.03e667c4.ttf"
+  },
+  {
+    "revision": "c6650728eae595c10273c630792e98c8",
+    "url": "/Planner-App/static/media/flower.c6650728.ttf"
+  },
+  {
+    "revision": "2e9f3c6ab064a9a2324e6040a98cac02",
+    "url": "/Planner-App/static/media/handy_ink.2e9f3c6a.otf"
   },
   {
     "revision": "34f3f57e6cc37a84b9457942a5e0cb9b",
