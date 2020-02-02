@@ -58,6 +58,7 @@
 .nameHeader {
   padding-bottom: 2vh;
   display: flex;
+  font-family: MyFont;
 }
 .userName {
   color: #3b5998;
@@ -157,8 +158,9 @@
 }
 
 .task-title {
+  font-family: Flower Power;
+  font-size: 18pt;
   cursor: pointer;
-  display: inline-block;
   max-height: 50px;
   max-width: 320px;
   white-space: nowrap;
@@ -170,6 +172,7 @@
 
 .progress {
   height: 4px !important;
+  margin-bottom: 12px;
 }
 
 /* Dashboard*/
@@ -208,6 +211,18 @@
   max-height: 60vh;
   margin: 10px;
   overflow-y: scroll;
+  select {
+    height: 20px;
+    font-size: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-family: monospace;
+  }
+}
+
+.menuOption {
+  font-size: 10pt;
+  font-family: Roboto;
 }
 
 .sortIcon {
@@ -232,4 +247,29 @@
   // .checklist-container {
   //   transform: scale(0.9);
   // }
+}
+
+@font-face {
+  font-family: "MyFont";
+  src: local("MyFont"), url(./fonts/handy_ink/handy_ink.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "Flower Power";
+  src: local("Flower Power"), url(./fonts/flower.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"), url(./fonts/Roboto-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Serenity";
+  src: local("Serenity"), url(./fonts/Serenity.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "Starlight";
+  src: local("Starlight"), url(./fonts/Starlight.ttf) format("truetype");
 }

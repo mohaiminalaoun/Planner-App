@@ -6,6 +6,20 @@ import { useState } from "react";
 import { Form, Button, FormControl, Badge } from "react-bootstrap";
 
 const LabelContextMenu = props => {
+  let style = {};
+  let isMobile = window.matchMedia("only screen and (max-width: 760px)")
+    .matches;
+  if (isMobile) {
+    style.position = "absolute";
+    style.bottom = "0px";
+    style.left = "0px";
+    style.top = "70%";
+    style.width = "100%";
+    style.border = "1px solid lightgrey";
+    style.borderTopLeftRadius = "12px";
+    style.borderTopRightRadius = "12px";
+    style.boxShadow = "0px 0px 20px 5px rgba(0, 0, 0, .2)";
+  }
   const badgeOptions = [
       "secondary",
       "success",
@@ -52,7 +66,7 @@ const LabelContextMenu = props => {
     );
   });
   return (
-    <div className="labelContextMenu" style={props.divStyle}>
+    <div className="labelContextMenu" style={isMobile ? style : props.divStyle}>
       <Form className="mb-3">
         <Form.Group controlId="formAddLabel">
           <FormControl

@@ -51,6 +51,15 @@ class App extends React.Component {
       labels: new Set(),
       menuOptionsList: [
         {
+          text: "Close",
+          onClick: () => {
+            this.setState({
+              displayAllContextMenus: false,
+              displayCurtain: false
+            });
+          }
+        },
+        {
           text: "Add deadline",
           onClick: () => {
             this.setState({
@@ -190,7 +199,6 @@ class App extends React.Component {
   };
 
   closeAllCtxMenus = () => {
-    console.log("clicked close all context menus fn");
     this.setState({
       displayAllContextMenus: false,
       displaySortingOptionsMenu: false,
@@ -273,6 +281,8 @@ class App extends React.Component {
           //if (Number.isInteger(end)) {
           firstMatch = item;
           //let endTime = Moment().add(end, "hour");
+          console.log("putting this in the database");
+          console.log(this.state.curDeadline);
           db.tasks.put({
             userName: this.props.userName,
             task: curTask,
@@ -286,8 +296,8 @@ class App extends React.Component {
         });
     }
     this.setState({
-      tempTask: "",
-      curDeadline: ""
+      tempTask: ""
+      //curDeadline: ""
     });
   };
 
@@ -708,16 +718,19 @@ class App extends React.Component {
                             className={"color-status " + task.progressState}
                           ></div>
                         ) : null}
-                        <span
+                        <div
                           className="task-title"
                           value={task.task}
                           onClick={this.openTaskModal}
                         >
                           {task.task}
-                        </span>
-                        <div className="endTime">
-                          {task.end ? Moment(task.end).format("LLLL") : null}
                         </div>
+                        {task.end ? (
+                          <div className="endTime">
+                            {Moment(task.end).format("LLLL")}
+                          </div>
+                        ) : null}
+
                         <button
                           onClick={this.showDeleteContextMenu}
                           value={task.task}

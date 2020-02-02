@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./DeadlineContextMenu.scss";
 import PropTypes from "prop-types";
 import withHOC from "./withContextMenu";
@@ -21,7 +21,19 @@ const DeadlineContextMenu = props => {
     style.bottom = "0px";
     style.left = "0px";
     style.height = "100px";
+    style.boxShadow = "0px 0px 20px 5px rgba(0, 0, 0, .2)";
   }
+
+  useEffect(() => {
+    if (isMobile) {
+      const datePickers = document.getElementsByClassName(
+        "react-datepicker__input-container"
+      );
+      Array.from(datePickers).forEach(el =>
+        el.childNodes[0].setAttribute("readOnly", true)
+      );
+    }
+  });
   return (
     <>
       <div
@@ -40,7 +52,7 @@ const DeadlineContextMenu = props => {
           timeCaption="time"
           dateFormat="MMMM d, yyyy h:mm aa"
         />
-        <span>Select a deadline for the task</span>
+        <span className="deadlont-text">Select a deadline for the task</span>
 
         {/*  <InputGroup className="mb-3">
           <FormControl
