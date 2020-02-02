@@ -158,8 +158,8 @@
 }
 
 .task-title {
-  font-family: Flower Power;
-  font-size: 18pt;
+  font-family: Roboto Italic;
+  font-size: 12pt;
   cursor: pointer;
   max-height: 50px;
   max-width: 320px;
@@ -243,6 +243,10 @@
   white-space: nowrap;
   overflow: hidden;
 }
+.calendar-icon {
+  height: 12px;
+  margin-right: 8px;
+}
 @media screen and (max-width: 500px) {
   // .checklist-container {
   //   transform: scale(0.9);
@@ -272,4 +276,10 @@
 @font-face {
   font-family: "Starlight";
   src: local("Starlight"), url(./fonts/Starlight.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto Italic";
+  src: local("Roboto Italic"),
+    url(./fonts/Roboto-MediumItalic.ttf) format("truetype");
 }

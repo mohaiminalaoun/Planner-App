@@ -3,7 +3,7 @@ import Moment from "moment";
 import "./App.scss";
 import "react-toggle/style.css"; // for ES6 modules
 import Toggle from "react-toggle";
-
+import eventIcon from "./assets/event.svg";
 import FacebookLogin from "react-facebook-login";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ContextMenuContainer from "./contextMenus/ContextMenuContainer";
@@ -726,9 +726,12 @@ class App extends React.Component {
                           {task.task}
                         </div>
                         {task.end ? (
-                          <div className="endTime">
-                            {Moment(task.end).format("LLLL")}
-                          </div>
+                          <>
+                            <img className="calendar-icon" src={eventIcon} />
+                            <div className="endTime">
+                              {Moment(task.end).format("LLLL")}
+                            </div>
+                          </>
                         ) : null}
 
                         <button
