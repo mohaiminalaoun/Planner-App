@@ -1,0 +1,10 @@
+.tabselector {
+  width: 50%;
+  cursor: pointer;
+  &:hover {
+    color: #3b5998;
+  }
+  &.selected {
+    color: #3b5998;
+  }
+}

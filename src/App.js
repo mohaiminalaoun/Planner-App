@@ -4,11 +4,13 @@ import "./App.scss";
 import "react-toggle/style.css"; // for ES6 modules
 import Toggle from "react-toggle";
 import eventIcon from "./assets/event.svg";
-import FacebookLogin from "react-facebook-login";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import ContextMenuContainer from "./contextMenus/ContextMenuContainer";
 import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
+import TabSelector from "./TabSelector";
+import LoginPage from "./LoginPage";
 import { connect } from "react-redux";
 import {
   Button,
@@ -48,6 +50,7 @@ class App extends React.Component {
       currentLabel: "",
       didRichTextChange: false,
       selectedLabelIdx: 0,
+      shouldShowDashboard: false,
       labels: new Set(),
       menuOptionsList: [
         {
@@ -400,6 +403,18 @@ class App extends React.Component {
     });
   };
 
+  showDashboard = () => {
+    this.setState({
+      shouldShowDashboard: true
+    });
+  };
+
+  hideDashboard = () => {
+    this.setState({
+      shouldShowDashboard: false
+    });
+  };
+
   openTaskModal = ev => {
     let clickedTask = ev.currentTarget.getAttribute("value");
     db.tasks
@@ -643,6 +658,11 @@ class App extends React.Component {
                   className="sortIcon"
                 ></button>
               </div>
+              <TabSelector
+                shouldShowDashboard={this.state.shouldShowDashboard}
+                showDashboard={this.showDashboard}
+                hideDashboard={this.hideDashboard}
+              />
               <TaskModal
                 show={this.state.showModal}
                 onHide={this.handleQuillClose}
@@ -656,167 +676,169 @@ class App extends React.Component {
                 richText={this.state.currentRichText}
                 closeFn={this.handleQuillClose}
               ></TaskModal>
-              {this.state.shouldShowColors ? (
+              {this.state.shouldShowDashboard ? (
                 <Dashboard tasks={this.state.tasks} />
               ) : null}
-              <InputGroup className="mb-3">
-                <FormControl
-                  onChange={handleInputChange}
-                  value={curTask}
-                  placeholder="Add task to do"
-                  aria-label="Add task to do"
-                  aria-describedby="basic-addon2"
-                />
-                <InputGroup.Append>
-                  <Button onClick={addToList} variant="outline-secondary">
-                    Add
-                  </Button>
-                </InputGroup.Append>
-              </InputGroup>
-              <ContextMenuContainer
-                cancelDelete={this.cancelDelete}
-                cancelSaveLabel={cancelSaveLabel}
-                changeFn={deadlineChangeFn}
-                changeURLFn={changeURLFn}
-                closeFn={linkCloseFn}
-                curDeadline={curDeadline}
-                currentLabel={this.state.currentLabel}
-                currentLabelChange={this.currentLabelChange}
-                currentLabelChangeByClick={this.currentLabelChangeByClick}
-                currentURL={currentURL}
-                currentURLText={currentURLText}
-                changeURLTextFn={changeURLTextFn}
-                deleteTask={deleteTask}
-                displayAllContextMenus={displayAllContextMenus}
-                displayDeleteCtxMenu={this.state.displayDeleteCtxMenu}
-                displayLabelCtxMenu={this.state.displayLabelCtxMenu}
-                displaySortingOptionsMenu={displaySortingOptionsMenu}
-                displayTaskCtxMenu={displayTaskCtxMenu}
-                displayLinkCtxMenu={displayLinkCtxMenu}
-                endTimeCloseFn={endTimeCloseFn}
-                labels={this.state.labels}
-                linkCloseFn={linkCloseFn}
-                menuOptionsList={
-                  displayAllContextMenus
-                    ? menuOptionsList
-                    : this.state.sortingOptions
-                }
-                saveFn={saveLinkFn}
-                saveLabel={saveLabel}
-                selectedLabelIdx={this.state.selectedLabelIdx}
-                selectedLabelIdxChange={this.selectedLabelIdxChange}
-                tempPosition={tempPosition}
-                tempTask={this.state.tempTask}
-              />
-              <ListGroup className="listOfTasksContainer">
-                {this.state &&
-                  this.state.tasks.map(task => {
-                    return (
-                      <ListGroup.Item key={listId++}>
-                        {this.state.shouldShowColors ? (
-                          <div
-                            className={"color-status " + task.progressState}
-                          ></div>
-                        ) : null}
-                        <div
-                          className="task-title"
-                          value={task.task}
-                          onClick={this.openTaskModal}
-                        >
-                          {task.task}
-                        </div>
-                        {task.end ? (
-                          <>
-                            <img className="calendar-icon" src={eventIcon} />
-                            <div className="endTime">
-                              {Moment(task.end).format("LLLL")}
-                            </div>
-                          </>
-                        ) : null}
+              {this.state.shouldShowDashboard ? null : (
+                <>
+                  <InputGroup className="mb-3">
+                    <FormControl
+                      onChange={handleInputChange}
+                      value={curTask}
+                      placeholder="Add task to do"
+                      aria-label="Add task to do"
+                      aria-describedby="basic-addon2"
+                    />
+                    <InputGroup.Append>
+                      <Button onClick={addToList} variant="outline-secondary">
+                        Add
+                      </Button>
+                    </InputGroup.Append>
+                  </InputGroup>
+                  <ContextMenuContainer
+                    cancelDelete={this.cancelDelete}
+                    cancelSaveLabel={cancelSaveLabel}
+                    changeFn={deadlineChangeFn}
+                    changeURLFn={changeURLFn}
+                    closeFn={linkCloseFn}
+                    curDeadline={curDeadline}
+                    currentLabel={this.state.currentLabel}
+                    currentLabelChange={this.currentLabelChange}
+                    currentLabelChangeByClick={this.currentLabelChangeByClick}
+                    currentURL={currentURL}
+                    currentURLText={currentURLText}
+                    changeURLTextFn={changeURLTextFn}
+                    deleteTask={deleteTask}
+                    displayAllContextMenus={displayAllContextMenus}
+                    displayDeleteCtxMenu={this.state.displayDeleteCtxMenu}
+                    displayLabelCtxMenu={this.state.displayLabelCtxMenu}
+                    displaySortingOptionsMenu={displaySortingOptionsMenu}
+                    displayTaskCtxMenu={displayTaskCtxMenu}
+                    displayLinkCtxMenu={displayLinkCtxMenu}
+                    endTimeCloseFn={endTimeCloseFn}
+                    labels={this.state.labels}
+                    linkCloseFn={linkCloseFn}
+                    menuOptionsList={
+                      displayAllContextMenus
+                        ? menuOptionsList
+                        : this.state.sortingOptions
+                    }
+                    saveFn={saveLinkFn}
+                    saveLabel={saveLabel}
+                    selectedLabelIdx={this.state.selectedLabelIdx}
+                    selectedLabelIdxChange={this.selectedLabelIdxChange}
+                    tempPosition={tempPosition}
+                    tempTask={this.state.tempTask}
+                  />
 
-                        <button
-                          onClick={this.showDeleteContextMenu}
-                          value={task.task}
-                          className="menuItembutton"
-                        />
-                        <div className="list-link">
-                          <a href={"https://" + task.url} target="_blank">
-                            {task.urlText}
-                          </a>
-                        </div>
-
-                        <button
-                          onClick={showDeadlineContextMenu}
-                          value={task.task}
-                          className="menuLinkbutton"
-                        />
-                        {!task.label ? null : (
-                          <Badge
-                            className="genericLabel"
-                            variant={badgeOptions[task.selectedLabelIdx]}
-                          >
-                            {task.label}
-                          </Badge>
-                        )}
-                        <Accordion defaultActiveKey="0">
-                          <Card className="invisible-card">
-                            <Accordion.Toggle
-                              className="accordion-toggle"
-                              eventKey="1"
+                  <ListGroup className="listOfTasksContainer">
+                    {this.state &&
+                      this.state.tasks.map(task => {
+                        return (
+                          <ListGroup.Item key={listId++}>
+                            {this.state.shouldShowColors ? (
+                              <div
+                                className={"color-status " + task.progressState}
+                              ></div>
+                            ) : null}
+                            <div
+                              className="task-title"
+                              value={task.task}
+                              onClick={this.openTaskModal}
                             >
-                              <ProgressBar
-                                striped
-                                now={
-                                  !task.progressState
-                                    ? 10
-                                    : task.progressState === "defined"
-                                    ? 10
-                                    : task.progressState === "inprogress"
-                                    ? 60
-                                    : 100
-                                }
-                              />
-                              Status:{" "}
-                              {task.progressState
-                                ? task.progressState
-                                : "Defined"}
-                            </Accordion.Toggle>
-                            <Accordion.Collapse eventKey="1">
-                              <Card.Body className="invisible-card-body">
-                                {" "}
-                                <select
-                                  className="custom-select"
-                                  value={task.progressState}
-                                  task={task.task}
-                                  onChange={changeProgressState}
+                              {task.task}
+                            </div>
+                            {task.end ? (
+                              <>
+                                <img
+                                  className="calendar-icon"
+                                  src={eventIcon}
+                                />
+                                <div className="endTime">
+                                  {Moment(task.end).format("LLLL")}
+                                </div>
+                              </>
+                            ) : null}
+
+                            <button
+                              onClick={this.showDeleteContextMenu}
+                              value={task.task}
+                              className="menuItembutton"
+                            />
+                            <div className="list-link">
+                              <a href={"https://" + task.url} target="_blank">
+                                {task.urlText}
+                              </a>
+                            </div>
+
+                            <button
+                              onClick={showDeadlineContextMenu}
+                              value={task.task}
+                              className="menuLinkbutton"
+                            />
+                            {!task.label ? null : (
+                              <Badge
+                                className="genericLabel"
+                                variant={badgeOptions[task.selectedLabelIdx]}
+                              >
+                                {task.label}
+                              </Badge>
+                            )}
+                            <Accordion defaultActiveKey="0">
+                              <Card className="invisible-card">
+                                <Accordion.Toggle
+                                  className="accordion-toggle"
+                                  eventKey="1"
                                 >
-                                  <option value="defined" key="0">
-                                    Defined
-                                  </option>
-                                  <option value="inprogress" key="1">
-                                    In Progress
-                                  </option>
-                                  <option value="completed" key="2">
-                                    Completed
-                                  </option>
-                                </select>
-                              </Card.Body>
-                            </Accordion.Collapse>
-                          </Card>
-                        </Accordion>
-                      </ListGroup.Item>
-                    );
-                  })}
-              </ListGroup>
+                                  <ProgressBar
+                                    striped
+                                    now={
+                                      !task.progressState
+                                        ? 10
+                                        : task.progressState === "defined"
+                                        ? 10
+                                        : task.progressState === "inprogress"
+                                        ? 60
+                                        : 100
+                                    }
+                                  />
+                                  Status:{" "}
+                                  {task.progressState
+                                    ? task.progressState
+                                    : "Defined"}
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="1">
+                                  <Card.Body className="invisible-card-body">
+                                    {" "}
+                                    <select
+                                      className="custom-select"
+                                      value={task.progressState}
+                                      task={task.task}
+                                      onChange={changeProgressState}
+                                    >
+                                      <option value="defined" key="0">
+                                        Defined
+                                      </option>
+                                      <option value="inprogress" key="1">
+                                        In Progress
+                                      </option>
+                                      <option value="completed" key="2">
+                                        Completed
+                                      </option>
+                                    </select>
+                                  </Card.Body>
+                                </Accordion.Collapse>
+                              </Card>
+                            </Accordion>
+                          </ListGroup.Item>
+                        );
+                      })}
+                  </ListGroup>
+                </>
+              )}
             </div>
           ) : (
-            <FacebookLogin
-              appId="176625356093687"
-              autoLoad={false}
-              callback={responseFacebook}
-              cssClass="my-facebook-button-class"
-              fields="name,email,picture"
-            />
+            <LoginPage responseFacebook={this.responseFacebook} />
           )}
         </div>
       </>
