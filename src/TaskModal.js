@@ -43,6 +43,31 @@ class TaskModal extends React.Component {
   };
   render() {
     let props = this.props;
+
+    let modules = {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ["bold", "italic", "underline", "strike", "code-block"],
+          [
+            { list: "ordered" },
+            { list: "bullet" },
+            { indent: "-1" },
+            { indent: "+1" }
+          ],
+          ["clean"]
+        ]
+      },
+      formats = [
+        "header",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "code-block",
+        "list",
+        "bullet",
+        "indent"
+      ];
     return (
       <Modal show={props.show} onHide={props.onHide} centered>
         <Modal.Header closeButton>
@@ -60,6 +85,8 @@ class TaskModal extends React.Component {
               <ReactQuill
                 value={props.richText || ""}
                 onChange={props.onRichTextChange}
+                modules={modules}
+                formats={formats}
               />
             }
           </Form.Group>
