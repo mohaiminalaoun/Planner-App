@@ -4,7 +4,7 @@ import "./App.scss";
 import "react-toggle/style.css"; // for ES6 modules
 import Toggle from "react-toggle";
 import eventIcon from "./assets/event.svg";
-
+import CompletedAnimation from "./animations/CompletedAnimation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ContextMenuContainer from "./contextMenus/ContextMenuContainer";
 import TaskModal from "./TaskModal";
@@ -45,6 +45,7 @@ class App extends React.Component {
       currentURL: "",
       currentURLText: "",
       showModal: false,
+      showCompletedAnimation: false,
       currentModalTask: {},
       currentRichText: "",
       currentLabel: "",
@@ -394,6 +395,17 @@ class App extends React.Component {
       currentURL: "",
       currentURLText: ""
     });
+
+    if (progressState === "completed") {
+      this.setState({
+        showCompletedAnimation: true
+      });
+      setTimeout(() => {
+        this.setState({
+          showCompletedAnimation: false
+        });
+      }, 4000);
+    }
   };
 
   showColors = ev => {
@@ -632,6 +644,7 @@ class App extends React.Component {
         <div className="App">
           {loggedin ? (
             <div className="checklist-container">
+              <CompletedAnimation show={this.state.showCompletedAnimation} />
               <Button
                 variant="secondary"
                 className="logout-button"
