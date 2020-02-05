@@ -6,5 +6,3 @@ Created using React, Redux, React-Bootstrap and IndexedDB.
 
 ![](App.png)
 
-
-![](ezgif.com-video-to-gif.gif)
