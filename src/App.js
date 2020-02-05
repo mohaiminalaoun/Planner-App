@@ -12,6 +12,19 @@ import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
 import TabSelector from "./TabSelector";
 import LoginPage from "./LoginPage";
+import {
+  addToList,
+  deleteTask,
+  handleInputChange
+} from "./_TaskListsFunctions";
+
+import {
+  saveLabel,
+  cancelSaveLabel,
+  currentLabelChange,
+  selectedLabelIdxChange,
+  currentLabelChangeByClick
+} from "./_LabelFunctions";
 import { connect } from "react-redux";
 import {
   Button,
@@ -188,20 +201,7 @@ class App extends React.Component {
     });
   };
 
-  addToList = ev => {
-    if (this.state.curTask.trim().length >= 1) {
-      let curTask = this.state.curTask;
-      let tasks = this.state.tasks;
-      tasks.push({
-        task: curTask
-      });
-      this.setState({
-        tasks: tasks,
-        curTask: ""
-      });
-      db.tasks.put({ userName: this.props.userName, task: curTask });
-    }
-  };
+  addToList = addToList.bind(this);
 
   closeAllCtxMenus = () => {
     this.setState({
@@ -212,45 +212,9 @@ class App extends React.Component {
     });
   };
 
-  handleInputChange = ev => {
-    let val = ev.target.value;
-    if (val.length < 50) {
-      this.setState({
-        curTask: ev.target.value
-      });
-    }
-  };
+  handleInputChange = handleInputChange.bind(this);
 
-  deleteTask = tempTask => {
-    let tasks = this.state.tasks,
-      curTask = tempTask,
-      idx;
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].task === curTask) {
-        idx = i;
-        break;
-      }
-    }
-
-    tasks = tasks.slice(0, idx).concat(tasks.slice(idx + 1, tasks.length));
-
-    this.setState({
-      tasks: tasks,
-      showDeletedAnimation: true,
-      displayDeleteCtxMenu: false,
-      displayCurtain: false
-    });
-    db.tasks
-      .where("task")
-      .equalsIgnoreCase(curTask)
-      .delete();
-
-    setTimeout(() => {
-      this.setState({
-        showDeletedAnimation: false
-      });
-    }, 3000);
-  };
+  deleteTask = deleteTask.bind(this);
 
   // Function to show the context menu
   showDeadlineContextMenu = ev => {
@@ -468,70 +432,15 @@ class App extends React.Component {
     });
   };
 
-  saveLabel = () => {
-    let curLabel = this.state.currentLabel,
-      curTask = this.state.tempTask,
-      stateLabels = this.state.labels;
-    stateLabels.add(curLabel);
-    db.tasks
-      .where("task")
-      .equalsIgnoreCase(curTask)
-      .first(item => {
-        let firstMatch = item;
-        db.tasks.put({
-          userName: this.props.userName,
-          task: curTask,
-          endTime: firstMatch.endTime,
-          url: firstMatch.url,
-          urlText: firstMatch.urlText,
-          progressState: firstMatch.progressState,
-          id: firstMatch.id,
-          label: curLabel,
-          selectedLabelIdx: this.state.selectedLabelIdx
-        });
-      });
-    let tasks = this.state.tasks.concat();
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].task === curTask) {
-        tasks[i].label = curLabel;
-        tasks[i].selectedLabelIdx = this.state.selectedLabelIdx;
-        break;
-      }
-    }
-    this.setState({
-      displayAllContextMenus: false,
-      displayLabelCtxMenu: false,
-      currentLabel: "",
-      tasks: tasks,
-      labels: stateLabels
-    });
-  };
+  saveLabel = saveLabel.bind(this);
 
-  cancelSaveLabel = () => {
-    this.setState({
-      displayAllContextMenus: false,
-      displayLabelCtxMenu: false,
-      currentLabel: ""
-    });
-  };
+  cancelSaveLabel = cancelSaveLabel.bind(this);
 
-  currentLabelChange = v => {
-    this.setState({
-      currentLabel: v.currentTarget.value
-    });
-  };
+  currentLabelChange = currentLabelChange.bind(this);
 
-  selectedLabelIdxChange = v => {
-    this.setState({
-      selectedLabelIdx: v
-    });
-  };
+  selectedLabelIdxChange = selectedLabelIdxChange.bind(this);
 
-  currentLabelChangeByClick = v => {
-    this.setState({
-      currentLabel: v
-    });
-  };
+  currentLabelChangeByClick = currentLabelChangeByClick.bind(this);
 
   sortTasksByLabel = () => {
     let tasks = this.state.tasks;
