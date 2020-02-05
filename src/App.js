@@ -697,7 +697,7 @@ class App extends React.Component {
                 didRichTextChange={this.state.didRichTextChange}
                 richText={this.state.currentRichText}
                 closeFn={this.handleQuillClose}
-              ></TaskModal>
+              />
               {this.state.shouldShowDashboard ? (
                 <Dashboard tasks={this.state.tasks} />
               ) : null}
@@ -768,6 +768,7 @@ class App extends React.Component {
                               value={task.task}
                               onClick={this.openTaskModal}
                             >
+                              <span className="details-icon">Details</span>
                               {task.task}
                             </div>
                             {task.end ? (

@@ -8,53 +8,45 @@
   width: 200px;
   margin-left: calc(50vw - 100px);
 }
-.logout-button {
-  float: right;
-  margin-left: 10px;
-  font-size: 10pt !important; /*Do disable bootstrap btn style*/
-  padding: 0.15rem 0.75rem !important;
-}
 
 .checklist-container {
   width: 400px;
   margin-left: calc(50vw - 200px);
   margin-top: 10vh;
   min-width: 300px;
+
+  .logout-button {
+    float: right;
+    margin-left: 10px;
+    font-size: 10pt !important; /*Do disable bootstrap btn style*/
+    padding: 0.15rem 0.75rem !important;
+  }
+
+  .sortIcon {
+    margin-top: 0.5vh;
+    background: url(assets/sort.svg);
+    background-repeat: no-repeat;
+    height: 15px;
+    margin-left: 24px;
+    border: none;
+    margin-right: 8px;
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .welcomeBar {
+    width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .toggle-container {
+    height: 25px;
+    width: 40px;
+  }
 }
 
-.menuItembutton {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  margin-top: 0.5vh;
-  background-color: indianred;
-  background: url(assets/trash.svg);
-  border: none;
-  background-repeat: no-repeat;
-  //float: right;
-  height: 15px;
-  border-radius: 15px;
-  outline: 0;
-  &:focus {
-    outline-color: red;
-  }
-}
-.menuLinkbutton {
-  position: absolute;
-  top: 30px;
-  right: 10px;
-  margin-top: 0.5vh;
-  background-color: green;
-  background: url(assets/menu.svg);
-  background-repeat: no-repeat;
-  float: right;
-  height: 15px;
-  border: none;
-  border-radius: 15px;
-  &:focus {
-    outline: 0;
-  }
-}
 .nameHeader {
   padding-bottom: 2vh;
   display: flex;
@@ -94,17 +86,6 @@
   display: inline-flex;
 }
 
-.endTime {
-  display: inline-flex;
-  height: 10px;
-  font-size: 9px;
-  font-weight: 300;
-}
-
-.list-link {
-  overflow: hidden;
-  font-size: 9px;
-}
 .accordion-toggle {
   border: none !important;
   background-color: transparent;
@@ -131,30 +112,6 @@
 
 .custom-select {
   width: 200px !important;
-}
-
-.toggle-container {
-  height: 25px;
-  width: 40px;
-}
-
-.color-status {
-  position: absolute;
-  height: 100% !important;
-  width: 10px;
-  background-color: grey;
-  margin-top: -12px;
-  margin-left: -20px;
-  opacity: 0.6;
-  &.defined {
-    background-color: lightgrey;
-  }
-  &.inprogress {
-    background-color: green;
-  }
-  &.completed {
-    background-color: #54a6ff;
-  }
 }
 
 .progress {
@@ -216,6 +173,94 @@
     overflow: hidden;
     margin-right: 10px;
     margin-bottom: -5px;
+
+    .details-icon {
+      float: right;
+      width: 0;
+      visibility: hidden;
+      background-color: grey;
+      border-radius: 4px;
+      color: white;
+      opacity: 0.9;
+      position: absolute;
+      left: 75%;
+      font-family: Arial;
+      font-size: 10pt;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    &:hover {
+      .details-icon {
+        visibility: visible;
+        width: fit-content;
+      }
+    }
+  }
+
+  .endTime {
+    display: inline-flex;
+    height: 10px;
+    font-size: 9px;
+    font-weight: 300;
+  }
+
+  .list-link {
+    overflow: hidden;
+    font-size: 9px;
+  }
+
+  .menuLinkbutton {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    margin-top: 0.5vh;
+    background-color: green;
+    background: url(assets/menu.svg);
+    background-repeat: no-repeat;
+    float: right;
+    height: 15px;
+    border: none;
+    border-radius: 15px;
+    &:focus {
+      outline: 0;
+    }
+  }
+  .menuItembutton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin-top: 0.5vh;
+    background-color: indianred;
+    background: url(assets/trash.svg);
+    border: none;
+    background-repeat: no-repeat;
+    //float: right;
+    height: 15px;
+    border-radius: 15px;
+    outline: 0;
+    &:focus {
+      outline-color: red;
+    }
+  }
+
+  .color-status {
+    position: absolute;
+    height: 100% !important;
+    width: 10px;
+    background-color: grey;
+    margin-top: -12px;
+    margin-left: -20px;
+    opacity: 0.6;
+    &.defined {
+      background-color: lightgrey;
+    }
+    &.inprogress {
+      background-color: green;
+    }
+    &.completed {
+      background-color: #54a6ff;
+    }
   }
 }
 
@@ -224,28 +269,11 @@
   font-family: Roboto;
 }
 
-.sortIcon {
-  margin-top: 0.5vh;
-  background: url(assets/sort.svg);
-  background-repeat: no-repeat;
-  height: 15px;
-  margin-left: 24px;
-  border: none;
-  margin-right: 8px;
-  &:focus {
-    outline: 0;
-  }
-}
-
-.welcomeBar {
-  width: 240px;
-  white-space: nowrap;
-  overflow: hidden;
-}
 .calendar-icon {
   height: 12px;
   margin-right: 8px;
 }
+
 @media screen and (max-width: 500px) {
   // .checklist-container {
   //   transform: scale(0.9);
