@@ -5,6 +5,7 @@ import "react-toggle/style.css"; // for ES6 modules
 import Toggle from "react-toggle";
 import eventIcon from "./assets/event.svg";
 import CompletedAnimation from "./animations/CompletedAnimation";
+import DeletedAnimation from "./animations/DeletedAnimation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ContextMenuContainer from "./contextMenus/ContextMenuContainer";
 import TaskModal from "./TaskModal";
@@ -235,6 +236,7 @@ class App extends React.Component {
 
     this.setState({
       tasks: tasks,
+      showDeletedAnimation: true,
       displayDeleteCtxMenu: false,
       displayCurtain: false
     });
@@ -242,6 +244,12 @@ class App extends React.Component {
       .where("task")
       .equalsIgnoreCase(curTask)
       .delete();
+
+    setTimeout(() => {
+      this.setState({
+        showDeletedAnimation: false
+      });
+    }, 3000);
   };
 
   // Function to show the context menu
@@ -645,6 +653,7 @@ class App extends React.Component {
           {loggedin ? (
             <div className="checklist-container">
               <CompletedAnimation show={this.state.showCompletedAnimation} />
+              <DeletedAnimation show={this.state.showDeletedAnimation} />
               <Button
                 variant="secondary"
                 className="logout-button"
