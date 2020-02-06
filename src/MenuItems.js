@@ -3,8 +3,8 @@ import "./MenuItems.scss";
 import PropTypes from "prop-types";
 import { Button, ListGroup } from "react-bootstrap";
 
-const MenuItems = props => {
-  const options = props.menuOptionsList.map(item => {
+const MenuItems = ({ menuOptionsList, tempPosition }) => {
+  const options = menuOptionsList.map(item => {
       return (
         <ListGroup.Item
           className="menuOption"
@@ -17,13 +17,13 @@ const MenuItems = props => {
     }),
     divStyle = {
       left:
-        props.tempPosition[0] + 150 < window.screen.width
-          ? props.tempPosition[0] + "px"
-          : props.tempPosition[0] - 100 + "px",
+        tempPosition[0] + 150 < window.screen.width
+          ? tempPosition[0] + "px"
+          : tempPosition[0] - 100 + "px",
       top:
-        props.tempPosition[0] + 150 < window.screen.width
-          ? props.tempPosition[1] + "px"
-          : props.tempPosition[1] - 50 + "px"
+        tempPosition[0] + 150 < window.screen.width
+          ? tempPosition[1] + "px"
+          : tempPosition[1] - 50 + "px"
     };
   return (
     <ListGroup className="menuItems" id="menuItems" style={divStyle}>
