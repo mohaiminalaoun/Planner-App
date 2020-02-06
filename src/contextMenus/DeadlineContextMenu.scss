@@ -2,33 +2,34 @@
   position: absolute;
   z-index: 3;
   //width: 250px;
-  border: 1px solid;
+  border: 1px solid lightgrey;
   padding: 10px;
   background-color: ghostwhite;
-}
 
-.deadline-ok-btn {
-  width: 50% !important;
-}
+  input {
+    width: 150px;
+    font-size: 8pt;
+    margin-right: 12px;
+    margin-bottom: 10px;
+    padding: 2px;
+    border-radius: 6px;
+    border: none;
+  }
 
-.deadline-close-btn {
-  width: 50%;
-  margin-right: 2px;
-}
-.react-datepicker-popper {
-  z-index: 4 !important; //
-}
+  .deadline-ok-btn {
+    width: 50% !important;
+  }
 
-.deadlont-text {
-  font-family: Roboto;
-}
+  .deadline-close-btn {
+    width: 50%;
+    margin-right: 2px;
+  }
 
-.taskContextMenu input {
-  width: 150px;
-  font-size: 8pt;
-  margin-right: 12px;
-  margin-bottom: 10px;
-  padding: 2px;
-  border-radius: 6px;
-  border: none;
+  .react-datepicker-popper {
+    z-index: 4 !important; //
+  }
+
+  .deadlont-text {
+    font-family: Roboto;
+  }
 }
