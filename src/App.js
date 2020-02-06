@@ -4,6 +4,7 @@ import "./App.scss";
 import "react-toggle/style.css"; // for ES6 modules
 import Toggle from "react-toggle";
 import eventIcon from "./assets/event.svg";
+import dragIcon from "./assets/drag.svg";
 import CompletedAnimation from "./animations/CompletedAnimation";
 import DeletedAnimation from "./animations/DeletedAnimation";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,6 +18,7 @@ import {
   deleteTask,
   handleInputChange
 } from "./_TaskListsFunctions";
+import { startDrag, stopDrag, onDragEnd } from "./_DragActions";
 
 import {
   saveLabel,
@@ -58,6 +60,7 @@ class App extends React.Component {
       displayCurtain: false,
       currentURL: "",
       currentURLText: "",
+      currentDraggingTask: null,
       showModal: false,
       showCompletedAnimation: false,
       currentModalTask: {},
@@ -257,8 +260,6 @@ class App extends React.Component {
           //if (Number.isInteger(end)) {
           firstMatch = item;
           //let endTime = Moment().add(end, "hour");
-          console.log("putting this in the database");
-          console.log(this.state.curDeadline);
           db.tasks.put({
             userName: this.props.userName,
             task: curTask,
@@ -504,6 +505,10 @@ class App extends React.Component {
     });
   };
 
+  startDrag = startDrag.bind(this);
+
+  stopDrag = stopDrag.bind(this);
+
   render = () => {
     let listId = 0,
       {
@@ -666,12 +671,28 @@ class App extends React.Component {
                     {this.state &&
                       this.state.tasks.map(task => {
                         return (
-                          <ListGroup.Item key={listId++}>
+                          <ListGroup.Item
+                            key={listId++}
+                            onDrop={() => {
+                              this.stopDrag(task.task);
+                            }}
+                            onDragOver={e => {
+                              e.preventDefault();
+                            }}
+                          >
                             {this.state.shouldShowColors ? (
                               <div
                                 className={"color-status " + task.progressState}
                               ></div>
                             ) : null}
+                            <img
+                              className="dragIcon"
+                              value={task.task}
+                              src={dragIcon}
+                              draggable
+                              onDrag={this.startDrag}
+                              onDragEnd={onDragEnd.bind(this)}
+                            ></img>
                             <div
                               className="task-title"
                               value={task.task}
