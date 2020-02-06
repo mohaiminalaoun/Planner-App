@@ -7,9 +7,6 @@ import DeleteContextMenu from "./DeleteContextMenu";
 import DeadlineContextMenu from "./DeadlineContextMenu";
 
 class ContextMenuContainer extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     let {
       displayAllContextMenus,

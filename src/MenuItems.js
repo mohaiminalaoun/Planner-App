@@ -1,7 +1,7 @@
 import React from "react";
 import "./MenuItems.scss";
 import PropTypes from "prop-types";
-import { Button, ListGroup } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 
 const MenuItems = ({ menuOptionsList, tempPosition }) => {
   const options = menuOptionsList.map(item => {

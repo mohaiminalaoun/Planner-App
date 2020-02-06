@@ -19,20 +19,21 @@ export function startDrag(ev) {
 
 export function stopDrag(task) {
   let tasks = this.state.tasks,
-    i,
-    idx = 0,
+    i, // index of dropped area
+    idx = 0, // index of dragging task
     curDragTask = this.state.currentDraggingTask;
-  for (i = 0; i < tasks.length; i++) {
-    if (tasks[i].task === task) {
-      break;
-    }
-  }
+
   for (idx = 0; idx < tasks.length; idx++) {
     if (tasks[idx].task === curDragTask.task) {
       break;
     }
   }
   tasks = tasks.slice(0, idx).concat(tasks.slice(idx + 1, tasks.length));
+  for (i = 0; i < tasks.length; i++) {
+    if (tasks[i].task === task) {
+      break;
+    }
+  }
   let firstHalf = tasks.slice(0, i + 1);
   if (this.state.currentDraggingTask !== null) {
     firstHalf.push({

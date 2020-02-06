@@ -293,6 +293,11 @@
   // .checklist-container {
   //   transform: scale(0.9);
   // }
+  .list-group-item:hover {
+    .dragIcon {
+      opacity: 0;
+    }
+  }
 }
 
 @keyframes flip {
