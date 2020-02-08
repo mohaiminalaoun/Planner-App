@@ -162,6 +162,9 @@
     padding-bottom: 2px;
     font-family: monospace;
   }
+  .blur {
+    filter: blur(1px);
+  }
   .task-title {
     font-family: Roboto Italic;
     font-size: 12pt;

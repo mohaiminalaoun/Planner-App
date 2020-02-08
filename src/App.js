@@ -679,6 +679,12 @@ class App extends React.Component {
                             onDragOver={e => {
                               e.preventDefault();
                             }}
+                            className={
+                              this.state.currentDraggingTask &&
+                              this.state.currentDraggingTask.task === task.task
+                                ? "blur"
+                                : ""
+                            }
                           >
                             {this.state.shouldShowColors ? (
                               <div

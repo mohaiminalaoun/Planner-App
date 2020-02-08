@@ -53,4 +53,10 @@ export function stopDrag(task) {
   }
 }
 
-export function onDragEnd() {}
+export function onDragEnd() {
+  if (this.state.currentDraggingTask) {
+    this.setState({
+      currentDraggingTask: null
+    });
+  }
+}
