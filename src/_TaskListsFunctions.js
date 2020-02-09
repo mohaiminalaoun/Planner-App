@@ -1,7 +1,4 @@
 import db from "./db";
-export function addTwo() {
-  console.log("adding 2");
-}
 
 export function addToList(ev) {
   if (this.state.curTask.trim().length >= 1) {

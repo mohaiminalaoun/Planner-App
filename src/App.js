@@ -58,6 +58,8 @@ class App extends React.Component {
       displayLabelCtxMenu: false,
       displayDeleteCtxMenu: false,
       displayCurtain: false,
+      displayCalendarCtxMenu: false,
+      currentCalendarDate: null,
       currentURL: "",
       currentURLText: "",
       currentDraggingTask: null,
@@ -175,7 +177,7 @@ class App extends React.Component {
       .then(() => {
         this.props.facebookLoginDispatch({
           loggedin: true,
-          userName: res.name
+          userName: res.name || "Hello"
         });
         if (tasks.length === 0) {
           tasks.push({
@@ -505,6 +507,44 @@ class App extends React.Component {
     });
   };
 
+  showCalendarContextMenu = date => {
+    this.setState({
+      displayCalendarCtxMenu: true,
+      currentCalendarDate: date
+    });
+  };
+
+  hideCalendarContextMenu = () => {
+    this.setState({
+      displayCalendarCtxMenu: false
+    });
+  };
+
+  // callback that we will pass to CalendarContextMenu
+  addTaskToDate = (task, date) => {
+    let tasks = this.state.tasks;
+
+    tasks.push({
+      task: task,
+      end: Moment(date)._d,
+      url: null,
+      urlText: null,
+      progressState: null,
+      label: null,
+      selectedLabelIdx: null
+    });
+
+    this.setState({
+      tasks: tasks
+    });
+
+    db.tasks.put({
+      userName: this.props.userName,
+      task: task,
+      endTime: Moment(date)._d
+    });
+  };
+
   startDrag = startDrag.bind(this);
 
   stopDrag = stopDrag.bind(this);
@@ -522,6 +562,7 @@ class App extends React.Component {
         displayTaskCtxMenu,
         displayLabelCtxMenu,
         displayDeleteCtxMenu,
+        displayCalendarCtxMenu,
         menuOptionsList,
         tempPosition,
         shouldShowColors
@@ -536,10 +577,12 @@ class App extends React.Component {
         deadlineChangeFn,
         deleteTask,
         handleInputChange,
+        hideCalendarContextMenu,
         linkCloseFn,
         responseFacebook,
         saveLinkFn,
         showDeadlineContextMenu,
+        showCalendarContextMenu,
         showColors,
         saveLabel,
         cancelSaveLabel,
@@ -613,7 +656,14 @@ class App extends React.Component {
                 closeFn={this.handleQuillClose}
               />
               {this.state.shouldShowDashboard ? (
-                <Dashboard tasks={this.state.tasks} />
+                <Dashboard
+                  tasks={this.state.tasks}
+                  currentCalendarDate={this.state.currentCalendarDate}
+                  displayCalendarCtxMenu={this.state.displayCalendarCtxMenu}
+                  showCalendarContextMenu={showCalendarContextMenu}
+                  hideCalendarContextMenu={hideCalendarContextMenu}
+                  addTaskToDate={this.addTaskToDate}
+                />
               ) : null}
               {this.state.shouldShowDashboard ? null : (
                 <>
@@ -651,6 +701,8 @@ class App extends React.Component {
                     displaySortingOptionsMenu={displaySortingOptionsMenu}
                     displayTaskCtxMenu={displayTaskCtxMenu}
                     displayLinkCtxMenu={displayLinkCtxMenu}
+                    displayCalendarCtxMenu={displayCalendarCtxMenu}
+                    addTaskToDate={this.addTaskToDate}
                     endTimeCloseFn={endTimeCloseFn}
                     labels={this.state.labels}
                     linkCloseFn={linkCloseFn}
@@ -771,7 +823,7 @@ class App extends React.Component {
                                     {" "}
                                     <select
                                       className="custom-select"
-                                      value={task.progressState}
+                                      value={task.progressState || ""}
                                       task={task.task}
                                       onChange={changeProgressState}
                                     >

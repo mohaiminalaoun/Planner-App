@@ -5,6 +5,7 @@ import LinkContextMenu from "./LinkContextMenu";
 import LabelContextMenu from "./LabelContextMenu";
 import DeleteContextMenu from "./DeleteContextMenu";
 import DeadlineContextMenu from "./DeadlineContextMenu";
+import CalendarContextMenu from "./CalendarContextMenu";
 
 class ContextMenuContainer extends React.Component {
   render() {
@@ -17,9 +18,11 @@ class ContextMenuContainer extends React.Component {
       endTimeCloseFn,
       changeFn,
       curDeadline,
+      currentCalendarDate,
       displayDeleteCtxMenu,
       displayLinkCtxMenu,
       displayLabelCtxMenu,
+      displayCalendarCtxMenu,
       linkCloseFn,
       saveFn,
       currentURL,
@@ -91,6 +94,13 @@ class ContextMenuContainer extends React.Component {
             tempTask={tempTask}
             deleteTask={deleteTask}
             cancelDelete={cancelDelete}
+          />
+        ) : null}
+        {displayCalendarCtxMenu ? (
+          <CalendarContextMenu
+            currentCalendarDate={currentCalendarDate}
+            addTaskToDate={this.props.addTaskToDate}
+            hideCalendarContextMenu={this.props.hideCalendarContextMenu}
           />
         ) : null}
       </>
