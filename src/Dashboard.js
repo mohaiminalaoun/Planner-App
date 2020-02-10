@@ -36,9 +36,13 @@ class Dashboard extends React.Component {
     };
   }
 
-  componentDidMount() {
-    //PieChart.createPieChart(this.props, "label");
-    //PieChart.createPieChart(this.props, "label");
+  setUpDates = () => {
+    this.setState({
+      dates: this.getDatesFromProps()
+    });
+  };
+
+  getDatesFromProps = () => {
     let dateSet = {},
       dates = [];
     this.props.tasks.forEach(t => {
@@ -48,14 +52,21 @@ class Dashboard extends React.Component {
       }
     });
     dates = this.state.dates;
+    dates.forEach(date => {
+      date.count = 0;
+    });
 
     for (let d in dateSet) {
       let idx = this.state.dateSet[d];
       dates && dates[idx] && dates[idx].count++;
     }
-    this.setState({
-      dates: dates
-    });
+    return dates;
+  };
+
+  componentDidMount() {
+    //PieChart.createPieChart(this.props, "label");
+    //PieChart.createPieChart(this.props, "label");
+    this.setUpDates();
   }
 
   render() {
@@ -72,7 +83,9 @@ class Dashboard extends React.Component {
         <CalendarHeatmap
           startDate={new Date(this.state.firstDate || "2020-01-01")}
           endDate={new Date(this.state.lastDate || "2020-06-12")}
-          values={this.state.dates}
+          values={(() => {
+            return this.getDatesFromProps();
+          })()}
           titleForValue={v => {
             return v && `${v.date} : ${v.count} tasks`;
           }}

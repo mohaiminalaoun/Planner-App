@@ -1,5 +1,7 @@
 import React from "react";
+import Moment from "moment";
 import { Button, InputGroup, FormControl, Badge } from "react-bootstrap";
+import eventIcon from "../assets/event.svg";
 import { useState } from "react";
 import "./CalendarContextMenu.scss";
 
@@ -16,6 +18,14 @@ const CalendarContextMenu = props => {
   let close = () => {
     props.hideCalendarContextMenu();
   };
+
+  let curDate = Moment(props.currentCalendarDate);
+  let formattedCurDate = curDate._d
+    .toString()
+    .split(" ")
+    .slice(0, 4)
+    .join(" ");
+
   return (
     <div className="calendarCtxMenu">
       <InputGroup className="mb-3">
@@ -39,7 +49,8 @@ const CalendarContextMenu = props => {
           </Button>
         </InputGroup.Append>
       </InputGroup>
-      <Badge>{props.currentCalendarDate}</Badge>
+      <img className="calendar-icon" src={eventIcon} />
+      <Badge>{formattedCurDate}</Badge>
     </div>
   );
 };
