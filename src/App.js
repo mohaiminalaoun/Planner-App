@@ -1,10 +1,8 @@
 import React from "react";
-import Moment from "moment";
 import "./App.scss";
 import "react-toggle/style.css"; // for ES6 modules
 import Toggle from "react-toggle";
-import eventIcon from "./assets/event.svg";
-import dragIcon from "./assets/drag.svg";
+import Moment from "moment";
 import CompletedAnimation from "./animations/CompletedAnimation";
 import DeletedAnimation from "./animations/DeletedAnimation";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,12 +11,18 @@ import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
 import TabSelector from "./TabSelector";
 import LoginPage from "./LoginPage";
+import TasksListGroup from "./Tasks/TasksListGroup";
 import {
   addToList,
   deleteTask,
   handleInputChange
 } from "./_TaskListsFunctions";
 import { startDrag, stopDrag, onDragEnd } from "./_DragActions";
+import {
+  showDeadlineContextMenu,
+  deadlineChangeFn,
+  endTimeCloseFn
+} from "./_DeadlineFunctions";
 
 import {
   saveLabel,
@@ -27,6 +31,18 @@ import {
   selectedLabelIdxChange,
   currentLabelChangeByClick
 } from "./_LabelFunctions";
+import {
+  linkCloseFn,
+  saveLinkFn,
+  changeURLTextFn,
+  changeURLFn
+} from "./_LinkFunctions";
+import { responseFacebook, logOutFacebook } from "./_SignInFunctions";
+import {
+  sortTasksByLabel,
+  sortTasksByEndTime,
+  showSortingOptionsMenu
+} from "./_SortingFunctions";
 import { connect } from "react-redux";
 import {
   Button,
@@ -153,58 +169,9 @@ class App extends React.Component {
     // getStocks();
   };
 
-  responseFacebook = res => {
-    let tasks = [],
-      labels = new Set(); // we're going to use a Set to store the labels
-    window.localStorage.setItem("todousername", res.name);
-    db.tasks
-      .where("userName")
-      .equalsIgnoreCase(res.name)
-      .each(rec => {
-        if (rec.label) {
-          labels.add(rec.label);
-        }
-        tasks.push({
-          task: rec.task,
-          end: rec.endTime,
-          url: rec.url,
-          urlText: rec.urlText,
-          progressPercent: rec.progressPercent,
-          label: rec.label,
-          selectedLabelIdx: rec.selectedLabelIdx
-        });
-      })
-      .then(() => {
-        this.props.facebookLoginDispatch({
-          loggedin: true,
-          userName: res.name || "Hello"
-        });
-        if (tasks.length === 0) {
-          tasks.push({
-            task: "Add a task like this!",
-            end: new Date(),
-            url: "www.google.com",
-            urlText: "Add a link like this",
-            progressPercent: 10,
-            label: "Label",
-            selectedLabelIdx: 1
-          });
-        }
-        this.setState({
-          tasks: tasks,
-          labels: labels
-        });
-      });
-  };
+  responseFacebook = responseFacebook.bind(this);
 
-  logOutFacebook = () => {
-    window.localStorage.removeItem("todousername");
-    window.FB.logout();
-    this.props.facebookLoginDispatch({
-      loggedin: false,
-      userName: "User"
-    });
-  };
+  logOutFacebook = logOutFacebook.bind(this);
 
   addToList = addToList.bind(this);
 
@@ -222,119 +189,20 @@ class App extends React.Component {
   deleteTask = deleteTask.bind(this);
 
   // Function to show the context menu
-  showDeadlineContextMenu = ev => {
-    this.setState({
-      displayAllContextMenus: true,
-      displayCurtain: window.screen.width < 500 ? false : true, // hack for mobile TODO: fix later
-      tempTask: ev.currentTarget.value,
-      tempPosition: [ev.clientX, ev.clientY]
-    });
-  };
+  showDeadlineContextMenu = showDeadlineContextMenu.bind(this);
 
-  deadlineChangeFn = time => {
-    console.log("deadline change fn is called with time " + time);
-    this.setState({
-      curDeadline: time
-    });
-  };
+  deadlineChangeFn = deadlineChangeFn.bind(this);
 
-  endTimeCloseFn = () => {
-    let tasks = this.state.tasks.concat();
-    let curTask = this.state.tempTask;
-    this.setState({
-      displayTaskCtxMenu: false
-    });
-    if (this.state.curDeadline) {
-      for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].task === curTask) {
-          tasks[i].end = this.state.curDeadline;
-          break;
-        }
-      }
-      this.setState({
-        tasks: tasks
-      });
-
-      let firstMatch;
-      db.tasks
-        .where("task")
-        .equalsIgnoreCase(curTask)
-        .first(item => {
-          //if (Number.isInteger(end)) {
-          firstMatch = item;
-          //let endTime = Moment().add(end, "hour");
-          if (firstMatch) {
-            db.tasks.put({
-              userName: this.props.userName,
-              task: curTask,
-              richText: firstMatch.richText,
-              endTime: this.state.curDeadline,
-              id: firstMatch.id,
-              label: firstMatch.label,
-              selectedLabelIdx: firstMatch.selectedLabelIdx
-            });
-          }
-          //  }
-        });
-    }
-    this.setState({
-      tempTask: ""
-      //curDeadline: ""
-    });
-  };
+  endTimeCloseFn = endTimeCloseFn.bind(this);
 
   // Functions for the link
-  linkCloseFn = () => {
-    this.setState({
-      displayLinkCtxMenu: false,
-      currentURL: "",
-      currentURLText: ""
-    });
-  };
+  linkCloseFn = linkCloseFn.bind(this);
 
-  saveLinkFn = () => {
-    let { currentURL, currentURLText, tempTask } = this.state,
-      tasks = this.state.tasks.concat();
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].task === tempTask) {
-        tasks[i].url = currentURL;
-        tasks[i].urlText = currentURLText;
-        break;
-      }
-    }
-    db.tasks
-      .where("task")
-      .equalsIgnoreCase(tempTask)
-      .first(item => {
-        let firstMatch = item;
-        db.tasks.put({
-          userName: this.props.userName,
-          task: tempTask,
-          endTime: firstMatch.endTime,
-          url: currentURL,
-          urlText: currentURLText,
-          id: firstMatch.id
-        });
-      });
-    this.setState({
-      displayLinkCtxMenu: false,
-      tasks: tasks,
-      currentURL: "",
-      currentURLText: ""
-    });
-  };
+  saveLinkFn = saveLinkFn.bind(this);
 
-  changeURLTextFn = ev => {
-    this.setState({
-      currentURLText: ev.target.value
-    });
-  };
+  changeURLTextFn = changeURLTextFn.bind(this);
 
-  changeURLFn = ev => {
-    this.setState({
-      currentURL: ev.target.value
-    });
-  };
+  changeURLFn = changeURLFn.bind(this);
 
   showColors = ev => {
     let curState = ev.currentTarget.value === "true";
@@ -398,51 +266,11 @@ class App extends React.Component {
 
   currentLabelChangeByClick = currentLabelChangeByClick.bind(this);
 
-  sortTasksByLabel = () => {
-    let tasks = this.state.tasks;
-    tasks.sort(function(a, b) {
-      let textA = (a.label && a.label.toUpperCase()) || "Z",
-        textB = (b.label && b.label.toUpperCase()) || "Z";
-      return textA < textB ? -1 : textA > textB ? 1 : 0;
-    });
+  sortTasksByLabel = sortTasksByLabel.bind(this);
 
-    this.setState({
-      tasks: tasks,
-      displaySortingOptionsMenu: false,
-      displayCurtain: false
-    });
-  };
+  sortTasksByEndTime = sortTasksByEndTime.bind(this);
 
-  sortTasksByEndTime = () => {
-    let tasks = this.state.tasks;
-    tasks.sort(function(a, b) {
-      if (!a.end) {
-        a.end = Moment(new Date()).subtract(10, "years");
-        a.removeEnd = true;
-      }
-      if (!b.end) {
-        b.end = Moment(new Date()).subtract(10, "years");
-        b.removeEnd = true;
-      }
-      return -1 * Moment(a.end).diff(Moment(b.end));
-    });
-    tasks.forEach(t => {
-      if (t.removeEnd) t.end = undefined;
-    });
-    this.setState({
-      tasks: tasks,
-      displaySortingOptionsMenu: false,
-      displayCurtain: false
-    });
-  };
-
-  showSortingOptionsMenu = ev => {
-    this.setState({
-      displaySortingOptionsMenu: true,
-      displayCurtain: window.screen.width > 500 ? true : false,
-      tempPosition: [ev.clientX, ev.clientY]
-    });
-  };
+  showSortingOptionsMenu = showSortingOptionsMenu.bind(this);
 
   showDeleteContextMenu = ev => {
     this.setState({
@@ -551,8 +379,7 @@ class App extends React.Component {
   };
 
   render = () => {
-    let listId = 0,
-      {
+    let {
         curDeadline,
         currentURL,
         currentURLText,
@@ -590,16 +417,6 @@ class App extends React.Component {
       } = this;
 
     let { loggedin, userName } = this.props;
-
-    const badgeOptions = [
-      "secondary",
-      "success",
-      "danger",
-      "warning",
-      "info",
-      "light",
-      "dark"
-    ];
 
     return (
       <>
@@ -718,97 +535,18 @@ class App extends React.Component {
                     tempPosition={tempPosition}
                     tempTask={this.state.tempTask}
                   />
-
-                  <ListGroup className="listOfTasksContainer">
-                    {this.state &&
-                      this.state.tasks.map(task => {
-                        return (
-                          <ListGroup.Item
-                            key={listId++}
-                            onDrop={() => {
-                              this.stopDrag(task.task);
-                            }}
-                            onDragOver={e => {
-                              e.preventDefault();
-                            }}
-                            className={
-                              this.state.currentDraggingTask &&
-                              this.state.currentDraggingTask.task === task.task
-                                ? "blur"
-                                : ""
-                            }
-                          >
-                            {this.state.shouldShowColors ? (
-                              <div
-                                className={"color-status " + task.progressState}
-                              ></div>
-                            ) : null}
-                            <img
-                              className="dragIcon"
-                              value={task.task}
-                              src={dragIcon}
-                              draggable
-                              onDrag={this.startDrag}
-                              onDragEnd={onDragEnd.bind(this)}
-                            ></img>
-                            <div
-                              className="task-title"
-                              value={task.task}
-                              onClick={this.openTaskModal}
-                            >
-                              <span className="details-icon">Details</span>
-                              {task.task}
-                            </div>
-                            {task.end ? (
-                              <>
-                                <img
-                                  className="calendar-icon"
-                                  src={eventIcon}
-                                />
-                                <div className="endTime">
-                                  {Moment(task.end).format("LLLL")}
-                                </div>
-                              </>
-                            ) : null}
-
-                            <button
-                              onClick={this.showDeleteContextMenu}
-                              value={task.task}
-                              className="menuItembutton"
-                            />
-                            <div className="list-link">
-                              <a href={"https://" + task.url} target="_blank">
-                                {task.urlText}
-                              </a>
-                            </div>
-
-                            <button
-                              onClick={showDeadlineContextMenu}
-                              value={task.task}
-                              className="menuLinkbutton"
-                            />
-                            {!task.label ? null : (
-                              <Badge
-                                className="genericLabel"
-                                variant={badgeOptions[task.selectedLabelIdx]}
-                              >
-                                {task.label}
-                              </Badge>
-                            )}
-                            <ProgressBar
-                              striped
-                              onClick={this.progressClick}
-                              value={task.task}
-                              now={
-                                !task.progressPercent
-                                  ? 10
-                                  : task.progressPercent
-                              }
-                            />
-                          </ListGroup.Item>
-                        );
-                      })}
-                  </ListGroup>
+                  <TasksListGroup
+                    tasks={this.state.tasks}
+                    currentDraggingTask={this.state.currentDraggingTask}
+                    onDragEnd={onDragEnd.bind(this)}
+                    openTaskModal={this.openTaskModal}
+                    showDeadlineContextMenu={showDeadlineContextMenu}
+                    showDeleteContextMenu={this.showDeleteContextMenu}
+                    shouldShowColors={this.state.shouldShowColors}
+                    startDrag={this.startDrag}
+                    stopDrag={this.stopDrag}
+                    progressClick={this.propgressClick}
+                  />
                 </>
               )}
             </div>
