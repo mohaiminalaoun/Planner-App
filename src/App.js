@@ -232,6 +232,7 @@ class App extends React.Component {
   };
 
   deadlineChangeFn = time => {
+    console.log("deadline change fn is called with time " + time);
     this.setState({
       curDeadline: time
     });
@@ -262,15 +263,17 @@ class App extends React.Component {
           //if (Number.isInteger(end)) {
           firstMatch = item;
           //let endTime = Moment().add(end, "hour");
-          db.tasks.put({
-            userName: this.props.userName,
-            task: curTask,
-            richText: firstMatch.richText,
-            endTime: this.state.curDeadline,
-            id: firstMatch.id,
-            label: firstMatch.label,
-            selectedLabelIdx: firstMatch.selectedLabelIdx
-          });
+          if (firstMatch) {
+            db.tasks.put({
+              userName: this.props.userName,
+              task: curTask,
+              richText: firstMatch.richText,
+              endTime: this.state.curDeadline,
+              id: firstMatch.id,
+              label: firstMatch.label,
+              selectedLabelIdx: firstMatch.selectedLabelIdx
+            });
+          }
           //  }
         });
     }
@@ -501,15 +504,13 @@ class App extends React.Component {
 
   progressClick = ev => {
     //console.log(ev.clientX);
-    let dims = ev.currentTarget.getBoundingClientRect();
-    let curTask = ev.currentTarget.getAttribute("value");
-    let percentDone =
-      Math.ceil(
-        Math.floor(((ev.clientX - dims.left) / dims.width) * 100) / 10
-      ) * 10;
-    console.log(percentDone);
-
-    let tasks = this.state.tasks.concat();
+    let dims = ev.currentTarget.getBoundingClientRect(),
+      curTask = ev.currentTarget.getAttribute("value"),
+      percentDone =
+        Math.ceil(
+          Math.floor(((ev.clientX - dims.left) / dims.width) * 100) / 10
+        ) * 10,
+      tasks = this.state.tasks.concat();
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].task === curTask) {
         tasks[i].progressPercent = percentDone;
