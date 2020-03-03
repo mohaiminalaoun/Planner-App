@@ -169,7 +169,7 @@ class App extends React.Component {
           end: rec.endTime,
           url: rec.url,
           urlText: rec.urlText,
-          progressState: rec.progressState,
+          progressPercent: rec.progressPercent,
           label: rec.label,
           selectedLabelIdx: rec.selectedLabelIdx
         });
@@ -185,7 +185,7 @@ class App extends React.Component {
             end: new Date(),
             url: "www.google.com",
             urlText: "Add a link like this",
-            progressState: "progress",
+            progressPercent: 10,
             label: "Label",
             selectedLabelIdx: 1
           });
@@ -331,56 +331,6 @@ class App extends React.Component {
     this.setState({
       currentURL: ev.target.value
     });
-  };
-
-  // Function to save the state change of the task
-  changeProgressState = param => {
-    let progressState = param.currentTarget.value,
-      curTask = param.currentTarget.getAttribute("task");
-    // TODO: make this better
-    param.currentTarget.parentElement.parentElement.classList.remove("show");
-
-    let tasks = this.state.tasks.concat();
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].task === curTask) {
-        tasks[i].progressState = progressState;
-        break;
-      }
-    }
-    db.tasks
-      .where("task")
-      .equalsIgnoreCase(curTask)
-      .first(item => {
-        if (item) {
-          let firstMatch = item;
-          db.tasks.put({
-            userName: this.props.userName,
-            task: curTask,
-            endTime: firstMatch.endTime,
-            url: firstMatch.url,
-            urlText: firstMatch.urlText,
-            progressState: progressState,
-            id: firstMatch.id
-          });
-        }
-      });
-    this.setState({
-      displayLinkCtxMenu: false,
-      tasks: tasks,
-      currentURL: "",
-      currentURLText: ""
-    });
-
-    if (progressState === "completed") {
-      this.setState({
-        showCompletedAnimation: true
-      });
-      setTimeout(() => {
-        this.setState({
-          showCompletedAnimation: false
-        });
-      }, 4000);
-    }
   };
 
   showColors = ev => {
@@ -529,7 +479,7 @@ class App extends React.Component {
       end: Moment(date)._d,
       url: null,
       urlText: null,
-      progressState: null,
+      progressPercent: null,
       label: null,
       selectedLabelIdx: null
     });
@@ -548,6 +498,56 @@ class App extends React.Component {
   startDrag = startDrag.bind(this);
 
   stopDrag = stopDrag.bind(this);
+
+  progressClick = ev => {
+    //console.log(ev.clientX);
+    let dims = ev.currentTarget.getBoundingClientRect();
+    let curTask = ev.currentTarget.getAttribute("value");
+    let percentDone =
+      Math.ceil(
+        Math.floor(((ev.clientX - dims.left) / dims.width) * 100) / 10
+      ) * 10;
+    console.log(percentDone);
+
+    let tasks = this.state.tasks.concat();
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].task === curTask) {
+        tasks[i].progressPercent = percentDone;
+        break;
+      }
+    }
+    db.tasks
+      .where("task")
+      .equalsIgnoreCase(curTask)
+      .first(item => {
+        if (item) {
+          let firstMatch = item;
+          db.tasks.put({
+            userName: this.props.userName,
+            task: curTask,
+            endTime: firstMatch.endTime,
+            url: firstMatch.url,
+            urlText: firstMatch.urlText,
+            progressPercent: percentDone,
+            id: firstMatch.id
+          });
+        }
+      });
+    this.setState({
+      tasks: tasks
+    });
+
+    if (percentDone === 100) {
+      this.setState({
+        showCompletedAnimation: true
+      });
+      setTimeout(() => {
+        this.setState({
+          showCompletedAnimation: false
+        });
+      }, 4000);
+    }
+  };
 
   render = () => {
     let listId = 0,
@@ -569,7 +569,6 @@ class App extends React.Component {
       } = this.state,
       {
         addToList,
-        changeProgressState,
         changeURLFn,
         changeURLTextFn,
         closeAllCtxMenus,
@@ -795,52 +794,16 @@ class App extends React.Component {
                                 {task.label}
                               </Badge>
                             )}
-                            <Accordion defaultActiveKey="0">
-                              <Card className="invisible-card">
-                                <Accordion.Toggle
-                                  className="accordion-toggle"
-                                  eventKey="1"
-                                >
-                                  <ProgressBar
-                                    striped
-                                    now={
-                                      !task.progressState
-                                        ? 10
-                                        : task.progressState === "defined"
-                                        ? 10
-                                        : task.progressState === "inprogress"
-                                        ? 60
-                                        : 100
-                                    }
-                                  />
-                                  Status:{" "}
-                                  {task.progressState
-                                    ? task.progressState
-                                    : "Defined"}
-                                </Accordion.Toggle>
-                                <Accordion.Collapse eventKey="1">
-                                  <Card.Body className="invisible-card-body">
-                                    {" "}
-                                    <select
-                                      className="custom-select"
-                                      value={task.progressState || ""}
-                                      task={task.task}
-                                      onChange={changeProgressState}
-                                    >
-                                      <option value="defined" key="0">
-                                        Defined
-                                      </option>
-                                      <option value="inprogress" key="1">
-                                        In Progress
-                                      </option>
-                                      <option value="completed" key="2">
-                                        Completed
-                                      </option>
-                                    </select>
-                                  </Card.Body>
-                                </Accordion.Collapse>
-                              </Card>
-                            </Accordion>
+                            <ProgressBar
+                              striped
+                              onClick={this.progressClick}
+                              value={task.task}
+                              now={
+                                !task.progressPercent
+                                  ? 10
+                                  : task.progressPercent
+                              }
+                            />
                           </ListGroup.Item>
                         );
                       })}
