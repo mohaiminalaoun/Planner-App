@@ -33,7 +33,7 @@ const TaskListGroup = ({
           <ListGroup.Item
             key={listId++}
             onDrop={() => {
-              this.stopDrag(task.task);
+             stopDrag(task.task);
             }}
             onDragOver={e => {
               e.preventDefault();

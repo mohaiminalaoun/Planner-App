@@ -545,7 +545,7 @@ class App extends React.Component {
                     shouldShowColors={this.state.shouldShowColors}
                     startDrag={this.startDrag}
                     stopDrag={this.stopDrag}
-                    progressClick={this.propgressClick}
+                    progressClick={this.progressClick}
                   />
                 </>
               )}
