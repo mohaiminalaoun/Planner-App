@@ -1,7 +1,8 @@
 .labelContextMenu {
   position: absolute;
   z-index: 3;
-  background-color: lightsteelblue;
+  background: rgb(11,146,176);
+  background: linear-gradient(0deg, rgba(11,146,176,1) 0%, rgba(103,199,215,1) 42%, rgba(175,224,226,1) 100%);
   padding: 8px;
   box-shadow: 0px 0px 20px 2px grey;
 
@@ -52,6 +53,9 @@
   .badge-container-heading {
     padding-bottom: 8px;
     border-bottom: 1px solid grey;
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
   }
   .prevBadgeContainer {
     display: flex;
@@ -63,4 +67,14 @@
       }
     }
   }
+}
+
+._floating-menu-ctr {
+  .selected {
+    font-weight: 800;
+  }
+}
+
+.curtain {
+  z-index: 4 !important;
 }

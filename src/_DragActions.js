@@ -1,5 +1,37 @@
 export function startDrag(ev) {
+  //console.log(ev.clientY);
+  var div = document.getElementById("drag_temp"),
+    left,
+    top;
+  if (div) div.style.opacity = "1";
+  if (div) {
+    left = parseInt(div.style.left);
+    top = parseInt(div.style.top);
+  }
+  if (!isNaN(left)) {
+    window.__pastLeft = left;
+  }
+  if (div && ev.clientX !== 0 && ev.clientY !== 0) {
+    if (!window.__pastLeft || Math.abs(window.__pastLeft - ev.clientX) > 2) {
+      div.style.left = ev.clientX + 5 + "px";
+      div.style.top = ev.clientY + 5 + "px";
+    }
+  }
+
   if (this.state.currentDraggingTask === null) {
+    var div =
+      document.getElementById("drag_temp") || document.createElement("div");
+    div.style.opacity = "1";
+    div.setAttribute("id", "drag_temp");
+    div.style.position = "absolute";
+    div.style.height = "40px";
+    div.style.width = "100px";
+    div.style.backgroundColor = "#92a7c7";
+    div.style.borderRadius = "4px";
+    div.innerText = "Move Item";
+    let rootDiv = document.getElementById("root");
+    rootDiv.appendChild(div);
+
     let title = ev.currentTarget.getAttribute("value"),
       tasks = this.state.tasks,
       deletedTask = null,
@@ -22,9 +54,10 @@ export function stopDrag(task) {
     i, // index of dropped area
     idx = 0, // index of dragging task
     curDragTask = this.state.currentDraggingTask;
+  console.log(curDragTask);
 
   for (idx = 0; idx < tasks.length; idx++) {
-    if (tasks[idx].task === curDragTask.task) {
+    if (tasks[idx] && tasks[idx].task === curDragTask.task) {
       break;
     }
   }
@@ -41,7 +74,7 @@ export function stopDrag(task) {
       end: curDragTask.end,
       url: curDragTask.url,
       urlText: curDragTask.urlText,
-      progressState: curDragTask.progressState,
+      progressPercent: curDragTask.progressPercent,
       label: curDragTask.label,
       selectedLabelIdx: curDragTask.selectedLabelIdx
     });
@@ -54,6 +87,8 @@ export function stopDrag(task) {
 }
 
 export function onDragEnd() {
+  var div = document.getElementById("drag_temp");
+  if (div) div.style.opacity = "0";
   if (this.state.currentDraggingTask) {
     this.setState({
       currentDraggingTask: null

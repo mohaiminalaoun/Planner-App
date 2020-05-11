@@ -2,6 +2,7 @@ import React from "react";
 import "./LabelContextMenu.scss";
 import PropTypes from "prop-types";
 import withHOC from "./withContextMenu";
+import { createMenu } from "floating-options-menu";
 import { useState } from "react";
 import { Form, Button, FormControl, Badge } from "react-bootstrap";
 
@@ -29,19 +30,14 @@ const LabelContextMenu = props => {
       "light",
       "dark"
     ],
-    badgesDiv = badgeOptions.map((item, idx) => (
-      <div
-        key={idx}
-        className={
-          "badgeOption " +
-          item +
-          (idx === props.selectedLabelIdx ? " clicked" : "")
-        }
-        onClick={() => {
-          props.selectedLabelIdxChange(idx);
-        }}
-      ></div>
-    )),
+    getBadgeMenuItems = (id) => [
+      {text: "Grey", fn: () => props.selectedLabelIdxChange(0), classes: id === 0 ? 'selected': ''},
+      {text: "Green", fn: () => props.selectedLabelIdxChange(1), classes: id === 1 ? 'selected': ''},
+      {text: "Red", fn: () => props.selectedLabelIdxChange(2), classes: id === 2 ? 'selected': ''},
+      {text: "Yellow", fn: () => props.selectedLabelIdxChange(3), classes: id === 3 ? 'selected': ''},
+      {text: "Blue", fn: () => props.selectedLabelIdxChange(4), classes: id === 4 ? 'selected': ''},
+      {text: "White", fn: () => props.selectedLabelIdxChange(5), classes: id === 5 ? 'selected': ''}
+    ],
     prevUsedLabels = [];
   props.labels.forEach(label => {
     prevUsedLabels.push(label);
@@ -77,8 +73,9 @@ const LabelContextMenu = props => {
             onChange={props.currentLabelChange}
           />
         </Form.Group>
-        <h6 className="badge-container-heading">Choose color</h6>
-        <div className="badge-container">{badgesDiv}</div>
+        <h6 className="badge-container-heading" onClick={(evt)=>{
+          createMenu(evt, getBadgeMenuItems(props.selectedLabelIdx), null)
+        }}>Choose color</h6>
         <div className="prevBadgeContainer">{prevUsedLabelsDisplay} </div>
         <div>
           <Button
