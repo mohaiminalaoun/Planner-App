@@ -70,11 +70,11 @@ const TaskListGroup = ({
               </>
             ) : null}
 
-            <button
+            {/*<button
               onClick={showDeleteContextMenu}
               value={task.task}
               className="menuItembutton"
-            />
+            />*/}
             <div className="list-link">
               <a href={"https://" + task.url} target="_blank">
                 {task.urlText}

@@ -16,8 +16,10 @@ export function addToList(ev) {
 }
 
 export function deleteTask(tempTask) {
+  console.log(this.state.tempTask);
+  console.log(this.state);
   let tasks = this.state.tasks,
-    curTask = tempTask,
+    curTask = this.state.tempTask,
     idx;
   for (let i = 0; i < tasks.length; i++) {
     if (tasks[i].task === curTask) {

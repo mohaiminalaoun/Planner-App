@@ -226,16 +226,13 @@
 
   .menuLinkbutton {
     position: absolute;
-    top: 30px;
-    right: 10px;
-    margin-top: 0.5vh;
+    top: 10px;
+    right: 3px;
     background-color: green;
     background: url(assets/menu.svg);
     background-repeat: no-repeat;
-    float: right;
     height: 15px;
     border: none;
-    border-radius: 15px;
     &:focus {
       outline: 0;
     }

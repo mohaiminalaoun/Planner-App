@@ -134,6 +134,12 @@ class App extends React.Component {
               displayCurtain: false
             });
           }
+        },
+        {
+          text: "Delete",
+          onClick: e => {
+            this.showDeleteContextMenu(e);
+          }
         }
       ],
       sortingOptions: [
@@ -275,8 +281,8 @@ class App extends React.Component {
   showDeleteContextMenu = ev => {
     this.setState({
       displayDeleteCtxMenu: true,
+      displayAllContextMenus: false,
       displayCurtain: window.screen.width > 500 ? true : false,
-      tempTask: ev.currentTarget.value,
       tempPosition: [ev.clientX, ev.clientY]
     });
   };
