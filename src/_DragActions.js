@@ -23,11 +23,6 @@ export function startDrag(ev) {
       document.getElementById("drag_temp") || document.createElement("div");
     div.style.opacity = "1";
     div.setAttribute("id", "drag_temp");
-    div.style.position = "absolute";
-    div.style.height = "40px";
-    div.style.width = "100px";
-    div.style.backgroundColor = "#92a7c7";
-    div.style.borderRadius = "4px";
     div.innerText = "Move Item";
     let rootDiv = document.getElementById("root");
     rootDiv.appendChild(div);
@@ -42,6 +37,7 @@ export function startDrag(ev) {
         break;
       }
     }
+
     this.setState({
       tasks: tasks,
       currentDraggingTask: deletedTask
