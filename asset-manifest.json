@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/Planner-App/static/css/main.a14c3a4d.chunk.css",
-    "main.js": "/Planner-App/static/js/main.c7471ec4.chunk.js",
-    "main.js.map": "/Planner-App/static/js/main.c7471ec4.chunk.js.map",
+    "main.css": "/Planner-App/static/css/main.94879940.chunk.css",
+    "main.js": "/Planner-App/static/js/main.15d598ab.chunk.js",
+    "main.js.map": "/Planner-App/static/js/main.15d598ab.chunk.js.map",
     "runtime-main.js": "/Planner-App/static/js/runtime-main.8657a95f.js",
     "runtime-main.js.map": "/Planner-App/static/js/runtime-main.8657a95f.js.map",
     "static/css/2.3f72244a.chunk.css": "/Planner-App/static/css/2.3f72244a.chunk.css",
-    "static/js/2.4d73f428.chunk.js": "/Planner-App/static/js/2.4d73f428.chunk.js",
-    "static/js/2.4d73f428.chunk.js.map": "/Planner-App/static/js/2.4d73f428.chunk.js.map",
+    "static/js/2.c593570a.chunk.js": "/Planner-App/static/js/2.c593570a.chunk.js",
+    "static/js/2.c593570a.chunk.js.map": "/Planner-App/static/js/2.c593570a.chunk.js.map",
     "index.html": "/Planner-App/index.html",
-    "precache-manifest.67265f45fd66f5cd2b92ca6091fca0a5.js": "/Planner-App/precache-manifest.67265f45fd66f5cd2b92ca6091fca0a5.js",
+    "precache-manifest.795a8635d9885f09e0307bc155b9aa1f.js": "/Planner-App/precache-manifest.795a8635d9885f09e0307bc155b9aa1f.js",
     "service-worker.js": "/Planner-App/service-worker.js",
     "static/css/2.3f72244a.chunk.css.map": "/Planner-App/static/css/2.3f72244a.chunk.css.map",
-    "static/css/main.a14c3a4d.chunk.css.map": "/Planner-App/static/css/main.a14c3a4d.chunk.css.map",
-    "static/js/2.4d73f428.chunk.js.LICENSE": "/Planner-App/static/js/2.4d73f428.chunk.js.LICENSE",
+    "static/css/main.94879940.chunk.css.map": "/Planner-App/static/css/main.94879940.chunk.css.map",
+    "static/js/2.c593570a.chunk.js.LICENSE": "/Planner-App/static/js/2.c593570a.chunk.js.LICENSE",
     "static/media/App.scss": "/Planner-App/static/media/trash.a36421a8.svg",
     "static/media/drag.svg": "/Planner-App/static/media/drag.bc42c9bb.svg",
     "static/media/event.svg": "/Planner-App/static/media/event.90837826.svg"
@@ -21,8 +21,8 @@
   "entrypoints": [
     "static/js/runtime-main.8657a95f.js",
     "static/css/2.3f72244a.chunk.css",
-    "static/js/2.4d73f428.chunk.js",
-    "static/css/main.a14c3a4d.chunk.css",
-    "static/js/main.c7471ec4.chunk.js"
+    "static/js/2.c593570a.chunk.js",
+    "static/css/main.94879940.chunk.css",
+    "static/js/main.15d598ab.chunk.js"
   ]
 }
