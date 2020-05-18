@@ -6,17 +6,18 @@ import Moment from "moment";
 import CompletedAnimation from "./animations/CompletedAnimation";
 import DeletedAnimation from "./animations/DeletedAnimation";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ContextMenuContainer from "./contextMenus/ContextMenuContainer";
+import ContextMenuContainer from "./components/contextMenus/ContextMenuContainer";
 import TaskModal from "./TaskModal";
 import Dashboard from "./Dashboard";
 import TabSelector from "./TabSelector";
 import LoginPage from "./LoginPage";
-import TasksListGroup from "./Tasks/TasksListGroup";
+import TasksListGroup from "./components/Tasks/TasksListGroup";
 import {
   addToList,
   deleteTask,
   handleInputChange
 } from "./_TaskListsFunctions";
+import { randomize, deRandomize } from "./_ShortcutFunctions";
 import { startDrag, stopDrag, onDragEnd } from "./_DragActions";
 import {
   showDeadlineContextMenu,
@@ -165,6 +166,18 @@ class App extends React.Component {
         name: window.localStorage.getItem("todousername")
       });
     }
+    document.onkeydown = e => {
+      if (e.shiftKey && (e.metaKey || e.ctrlKey) && e.code === "Comma") {
+        randomize.call(this);
+      } else if (
+        e.shiftKey &&
+        (e.metaKey || e.ctrlKey) &&
+        e.code === "Period" &&
+        !!window.tasks
+      ) {
+        deRandomize.call(this);
+      }
+    };
     // async function getStocks() {
     //   let url =
     //     "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=MSFT&interval=30min&apikey=1HZKQ8BEPBGQMTV0";

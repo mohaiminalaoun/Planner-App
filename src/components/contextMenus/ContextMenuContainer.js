@@ -1,6 +1,6 @@
 import React from "react";
 
-import MenuItems from "../MenuItems";
+import MenuItems from "../../MenuItems";
 import LinkContextMenu from "./LinkContextMenu";
 import LabelContextMenu from "./LabelContextMenu";
 import DeleteContextMenu from "./DeleteContextMenu";

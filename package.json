@@ -36,6 +36,7 @@
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:debug": "react-scripts  --inspect-brk test --no-cache --verbose=false --runInBand",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

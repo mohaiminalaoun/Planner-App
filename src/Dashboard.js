@@ -5,7 +5,7 @@ import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import Moment from "moment";
 import { Badge } from "react-bootstrap";
-import ContextMenuContainer from "./contextMenus/ContextMenuContainer";
+import ContextMenuContainer from "./components/contextMenus/ContextMenuContainer";
 
 class Dashboard extends React.Component {
   constructor(props) {

@@ -1,8 +1,8 @@
 import React from "react";
 import { Badge, ListGroup, ProgressBar } from "react-bootstrap";
-import dragIcon from "../assets/drag.svg";
+import dragIcon from "../../assets/drag.svg";
 import Moment from "moment";
-import eventIcon from "../assets/event.svg";
+import eventIcon from "../../assets/event.svg";
 
 const TaskListGroup = ({
   currentDraggingTask,

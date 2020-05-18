@@ -1,7 +1,7 @@
 import React from "react";
 import Moment from "moment";
 import { Button, InputGroup, FormControl, Badge } from "react-bootstrap";
-import eventIcon from "../assets/event.svg";
+import eventIcon from "../../assets/event.svg";
 import { useState } from "react";
 import "./CalendarContextMenu.scss";
 
