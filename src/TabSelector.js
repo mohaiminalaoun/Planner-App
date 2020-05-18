@@ -9,12 +9,14 @@ const TabSelector = ({ shouldShowDashboard, hideDashboard, showDashboard }) => {
         onClick={hideDashboard}
       >
         Tasks
+        <div class="selectorDiv"></div>
       </Badge>
       <Badge
         className={"tabselector " + (shouldShowDashboard ? "selected" : "")}
         onClick={showDashboard}
       >
         Statistics
+        <div class="selectorDiv"></div>
       </Badge>
     </>
   );

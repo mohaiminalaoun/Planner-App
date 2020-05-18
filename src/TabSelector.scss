@@ -1,6 +1,7 @@
 .tabselector {
   width: 50%;
-  margin-bottom: 4px;
+  position: relative;
+  padding-bottom: 8px;
   cursor: pointer;
   &:hover {
     color: #3b5998;
@@ -8,5 +9,15 @@
   }
   &.selected {
     color: #3b5998;
+    .selectorDiv {
+      position: absolute;
+      bottom: 0;
+      width: 160px;
+      left: 20px;
+      height: 3px;
+      background-color: #ec5851;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+    }
   }
 }
