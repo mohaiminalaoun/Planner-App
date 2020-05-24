@@ -1,9 +1,9 @@
 export function startDrag(ev) {
-  //console.log(ev.clientY);
+  //console.log("startdrag");
   var div = document.getElementById("drag_temp"),
     left,
     top;
-  if (div) div.style.opacity = "1";
+
   if (div) {
     left = parseInt(div.style.left);
     top = parseInt(div.style.top);
@@ -15,13 +15,15 @@ export function startDrag(ev) {
     if (!window.__pastLeft || Math.abs(window.__pastLeft - ev.clientX) > 2) {
       div.style.left = ev.clientX + 5 + "px";
       div.style.top = ev.clientY + 5 + "px";
+
+      //div.style.opacity = "1";
     }
   }
 
   if (this.state.currentDraggingTask === null) {
     var div =
       document.getElementById("drag_temp") || document.createElement("div");
-    div.style.opacity = "1";
+    //div.style.opacity = "1";
     div.setAttribute("id", "drag_temp");
     div.innerText = "Move Item";
     let rootDiv = document.getElementById("root");
@@ -45,12 +47,26 @@ export function startDrag(ev) {
   }
 }
 
+export function initializeDrag(ev) {
+  //console.log("inititliaze drag");
+  var div = document.getElementById("drag_temp");
+  if (div && ev) {
+    if (ev) {
+      div.style.left = ev.clientX + 5 + "px";
+      div.style.top = ev.clientY + 5 + "px";
+    }
+    setTimeout(() => {
+      div.style.opacity = "1";
+    }, 100);
+  }
+}
+
 export function stopDrag(task) {
+  //console.log("stopdrag");
   let tasks = this.state.tasks,
     i, // index of dropped area
     idx = 0, // index of dragging task
     curDragTask = this.state.currentDraggingTask;
-  console.log(curDragTask);
 
   for (idx = 0; idx < tasks.length; idx++) {
     if (tasks[idx] && tasks[idx].task === curDragTask.task) {
@@ -84,6 +100,7 @@ export function stopDrag(task) {
 
 export function onDragEnd() {
   var div = document.getElementById("drag_temp");
+  console.log("dragend");
   if (div) div.style.opacity = "0";
   if (this.state.currentDraggingTask) {
     this.setState({

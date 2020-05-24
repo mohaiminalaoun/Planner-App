@@ -18,7 +18,7 @@ import {
   handleInputChange
 } from "./_TaskListsFunctions";
 import { randomize, deRandomize } from "./_ShortcutFunctions";
-import { startDrag, stopDrag, onDragEnd } from "./_DragActions";
+import { initializeDrag, startDrag, stopDrag, onDragEnd } from "./_DragActions";
 import {
   showDeadlineContextMenu,
   deadlineChangeFn,
@@ -349,6 +349,8 @@ class App extends React.Component {
 
   stopDrag = stopDrag.bind(this);
 
+  initializeDrag = initializeDrag.bind(this);
+
   progressClick = ev => {
     //console.log(ev.clientX);
     let dims = ev.currentTarget.getBoundingClientRect(),
@@ -562,6 +564,7 @@ class App extends React.Component {
                     showDeadlineContextMenu={showDeadlineContextMenu}
                     showDeleteContextMenu={this.showDeleteContextMenu}
                     shouldShowColors={this.state.shouldShowColors}
+                    initializeDrag={this.initializeDrag}
                     startDrag={this.startDrag}
                     stopDrag={this.stopDrag}
                     progressClick={this.progressClick}

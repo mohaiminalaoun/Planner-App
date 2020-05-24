@@ -14,6 +14,7 @@ const TaskListGroup = ({
   showDeleteContextMenu,
   startDrag,
   stopDrag,
+  initializeDrag,
   tasks
 }) => {
   let listId = 0;
@@ -52,6 +53,7 @@ const TaskListGroup = ({
               value={task.task}
               src={dragIcon}
               draggable
+              onDragStart={initializeDrag}
               onDrag={startDrag}
               onDragEnd={onDragEnd}
             ></img>
