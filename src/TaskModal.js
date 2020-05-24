@@ -9,7 +9,8 @@ class TaskModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: props.richText || ""
+      text: props.richText || "",
+      toolbarVisible: false
     };
   }
 
@@ -40,6 +41,9 @@ class TaskModal extends React.Component {
       .then(() => {
         this.props.closeFn();
       });
+    this.setState({
+      toolbarVisible: false
+    });
   };
   render() {
     let props = this.props;
@@ -68,6 +72,18 @@ class TaskModal extends React.Component {
         "bullet",
         "indent"
       ];
+    let btnStyle = {
+      float: "right",
+      height: "24px",
+      fontSize: "11px",
+      padding: "13px",
+      paddingTop: "4px"
+    };
+    let showToolbar = () => {
+      this.setState(prevState => ({
+        toolbarVisible: !prevState.toolbarVisible
+      }));
+    };
     return (
       <Modal show={props.show} onHide={props.onHide} centered>
         <Modal.Header closeButton>
@@ -76,11 +92,19 @@ class TaskModal extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group controlId="exampleForm.ControlTextarea1">
+          <Form.Group
+            controlId="exampleForm.ControlTextarea1"
+            className={
+              "quill-box" + (this.state.toolbarVisible ? "" : " hide-toolbar")
+            }
+          >
             <Form.Label>
               {props.currentModalTask &&
                 "Due by: " + Moment(props.currentModalTaskEnd).format("LLLL")}
             </Form.Label>
+            <Button variant="info" style={btnStyle} onClick={showToolbar}>
+              {this.state.toolbarVisible ? "Hide Toolbar" : "Show Toolbar"}
+            </Button>
             {
               <ReactQuill
                 value={props.richText || ""}

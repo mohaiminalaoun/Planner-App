@@ -312,6 +312,12 @@
   font-family: Roboto;
 }
 
+.ql-toolbar {
+  &.ql-snow {
+    border-bottom: none !important;
+  }
+}
+
 @media screen and (max-width: 500px) {
   .checklist-container {
     margin-left: 0px;

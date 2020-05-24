@@ -7,3 +7,17 @@
 .task-modal-title {
   word-break: break-all;
 }
+
+.ql-toolbar {
+  &.ql-snow {
+    border-bottom: none !important;
+  }
+}
+
+.quill-box {
+  &.hide-toolbar {
+    span {
+      display: none !important;
+    }
+  }
+}
