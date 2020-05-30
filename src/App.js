@@ -561,6 +561,7 @@ class App extends React.Component {
                     currentDraggingTask={this.state.currentDraggingTask}
                     onDragEnd={onDragEnd.bind(this)}
                     openTaskModal={this.openTaskModal}
+                    showCalendarCtxMenu={showCalendarContextMenu}
                     showDeadlineContextMenu={showDeadlineContextMenu}
                     showDeleteContextMenu={this.showDeleteContextMenu}
                     shouldShowColors={this.state.shouldShowColors}

@@ -11,6 +11,7 @@ const TaskListGroup = ({
   progressClick,
   shouldShowColors,
   showDeadlineContextMenu,
+  showCalendarCtxMenu,
   showDeleteContextMenu,
   startDrag,
   stopDrag,
@@ -67,7 +68,14 @@ const TaskListGroup = ({
             </div>
             {task.end ? (
               <>
-                <img className="calendar-icon" src={eventIcon} />
+                <img
+                  className="calendar-icon"
+                  src={eventIcon}
+                  onClick={e => {
+                    console.log("clicked calendar");
+                    showCalendarCtxMenu(e);
+                  }}
+                />
                 <div className="endTime">{Moment(task.end).format("LLLL")}</div>
               </>
             ) : null}

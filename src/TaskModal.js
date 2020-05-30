@@ -5,12 +5,15 @@ import "./TaskModal.scss";
 import "react-quill/dist/quill.snow.css"; // ES6
 import { Button, InputGroup, Form, Modal } from "react-bootstrap";
 import db from "./db";
+import {handleInputChange} from "./_TaskListsFunctions";
 class TaskModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       text: props.richText || "",
-      toolbarVisible: false
+      toolbarVisible: false,
+      editTitleVisible: false,
+      curTitle: JSON.stringify(props.currentModalTask) || ""
     };
   }
 
@@ -45,6 +48,22 @@ class TaskModal extends React.Component {
       toolbarVisible: false
     });
   };
+  handleTextAreaChange = (ev) => {
+      let val = ev.target.value;
+      if (val.length < 50) {
+        this.setState({
+          curTitle: ev.target.value
+        });
+      }
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.currentModalTask !== prevProps.currentModalTask) {
+      this.setState({
+        curTitle: this.props.currentModalTask
+      });
+    }
+  }
+
   render() {
     let props = this.props;
 
@@ -87,10 +106,15 @@ class TaskModal extends React.Component {
     return (
       <Modal show={props.show} onHide={props.onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="task-modal-title">
-            {props.currentModalTask}
-          </Modal.Title>
+          {this.state.editTitleVisible ? null : (<Modal.Title className="task-modal-title">
+            {this.state.curTitle}
+          </Modal.Title>) }
+          {this.state.editTitleVisible ?
+              <input value={this.state.curTitle} onChange={this.handleTextAreaChange} className="edit-task-title"></input> : null}
         </Modal.Header>
+        <Button className="edit-title-btn" variant="outline-secondary" onClick={()=>{this.setState((prevState) => ({editTitleVisible: !prevState.editTitleVisible}))}}>
+          {this.state.editTitleVisible ? "Done": "Edit"}
+        </Button>
         <Modal.Body>
           <Form.Group
             controlId="exampleForm.ControlTextarea1"

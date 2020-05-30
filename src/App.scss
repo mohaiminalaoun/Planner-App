@@ -1,14 +1,3 @@
-.my-facebook-button-class {
-  position: absolute;
-  position: absolute;
-  margin-top: 40vh;
-  background: #3b5998;
-  color: white;
-  font-weight: 600;
-  width: 200px;
-  margin-left: calc(50vw - 100px);
-}
-
 .checklist-container {
   width: 400px;
   margin-left: calc(50vw - 200px);
@@ -310,12 +299,6 @@
   box-shadow: 2px 2px 3px 0px grey;
   color: white;
   font-family: Roboto;
-}
-
-.ql-toolbar {
-  &.ql-snow {
-    border-bottom: none !important;
-  }
 }
 
 @media screen and (max-width: 500px) {
