@@ -9,7 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "bootstrap": "^4.4.1",
     "d3": "^5.15.0",
-    "dexie": "^2.0.4",
+    "dexie": "^3.2.2",
     "floating-options-menu": "^1.0.10",
     "gh-pages": "^2.2.0",
     "moment": "^2.24.0",
